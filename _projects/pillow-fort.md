@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Pillow Fort"
+title:  "Pillowfort"
 date:   2025-02-27 19:49:59 -0800
 categories: weird art
-image: pf.jpg
+image: pillowfort.png
 hidden: false
-description: This is my pillow fort! I store things inside of it! It's mine! All mine!!
+description: A set of magnetic pillow building blocks for building free-standing pillowforts!
 ---
