@@ -1,0 +1,45 @@
+/* --- 1. The Core Toggle (Swaps the SVG layers) --- */
+/* Hide active layers by default */
+#about_active, #projects_active, #research_active, #contact_active {
+  display: none;
+}
+
+/* Show active layers only when the parent has the .active class */
+.nav-item.active #about_active,
+.nav-item.active #projects_active,
+.nav-item.active #research_active,
+.nav-item.active #contact_active {
+  display: block;
+}
+
+/* Hide inactive layers when the parent is active */
+.nav-item.active #about_inactive,
+.nav-item.active #projects_inactive,
+.nav-item.active #research_inactive,
+.nav-item.active #contact_inactive {
+  display: none;
+}
+
+/* --- 2. The Hover Animation (Universal) --- */
+.fg {
+  transition: transform 0.2s ease-out;
+  transform-box: fill-box;
+  /* Ensure it starts at 0,0 */
+  transform: translate(0px, 0px);
+}
+
+/* This triggers on ANY nav-item hover, active or not */
+.nav-item:hover .fg {
+  transform: translate(-5px, 5px);
+}
+
+/* --- 3. Optional: Smooth "Entry" Animation --- */
+/* This makes the button pop slightly when the page loads/swaps */
+@keyframes buttonLoad {
+  0% { transform: translate(-5px, 5px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+.nav-item .fg {
+  animation: buttonLoad 0.4s ease-out;
+}
