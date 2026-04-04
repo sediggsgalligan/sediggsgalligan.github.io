@@ -73,6 +73,12 @@ img {
    Site Wrapper
    ============================================= */
 .site-wrapper {
+  /* max-width: 960px; */
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+}
+
+.about-layout {
   max-width: 960px;
   margin: 0 auto;
   padding: 2rem 2rem 4rem;
@@ -251,9 +257,9 @@ img {
 
 .about-photo img {
   width: 100%;
-  object-fit: cover;
-  border-radius: 20px;
-  background: #e8e0d4;
+  object-fit: contain;
+  /* border-radius: 20px; */
+  /* background: #e8e0d4; */
   min-height: 280px;
 }
 
@@ -284,25 +290,24 @@ img {
   grid-template-columns: 220px 1fr;
   gap: 1.8rem;
   align-items: center;
-  background: #fff;
-  border-radius: 24px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  /* background: #fff; */
+  /* border-radius: 24px; */
+  /* padding: 1.5rem; */
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); */
+  /* transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
+  /* border: 1px solid rgba(0, 0, 0, 0.03); */
 }
 
-.project-card:hover {
+/* .project-card:hover {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
-}
+} */
 
 .project-card-img {
   width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  border-radius: 10px;
-  background: #e8e0d4;
+  object-fit: contain;
+  /* border-radius: 10px; */
+  /* background: #e8e0d4; */
 }
 
 .project-card-body h2 {
@@ -360,4 +365,104 @@ img {
   .nav {
     gap: 1rem;
   }
+}
+
+
+
+/* Sophia D-G Name Svg */
+.site-title a img {
+  height: 2.5rem; 
+  width: auto;
+  display: block;
+  
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 600px) {
+  .site-title a img {
+    height: 1.8rem;
+  }
+}
+
+.site-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 2rem 0;
+}
+
+.site-title {
+  /* margin: 0; */
+  display: flex;
+  justify-content: center;
+}
+
+.site-title img {
+  height: 3rem;           /* Adjust this to change your "font size" */
+  width: auto;
+  max-width: 90vw;        /* Prevents it from hitting screen edges on mobile */
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;        /* Allows buttons to drop to a second line on small phones */
+  gap: 15px;
+}
+
+
+.site-title a {
+  /* Prevents the default browser "ghost" image from appearing */
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  
+  /* Ensures the link doesn't block the drag cursor */
+  display: inline-block; 
+}
+
+.char {
+  /* Crucial: tells the browser this specific group is the interactive part */
+  touch-action: none; 
+  pointer-events: visiblePainted;
+}
+
+
+/* Project Image CSS */
+
+/* Container for the image stack */
+.project-card-img-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0; /* Removes tiny bottom gaps */
+}
+
+/* Ensure both images take up the same space */
+.project-card-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Position the active image directly over the default one */
+.img-active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0; /* Hidden by default */
+  z-index: 1;
+}
+
+/* Hover logic: trigger when the user hovers over the WHOLE card */
+.project-card:hover .img-active {
+  opacity: 1;
+}
+
+/* Optional: slightly fade the original to make the transition cleaner */
+.project-card:hover .img-default {
+  opacity: 0;
 }

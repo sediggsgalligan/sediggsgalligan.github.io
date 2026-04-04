@@ -49,13 +49,144 @@
   // Run once on initial page load
   window.addEventListener('DOMContentLoaded', updateActiveNav);
 </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+
+<style>
+  .char { cursor: grab; }
+  .char:active { cursor: grabbing; }
+</style>
+
+<!-- <script>
+  gsap.registerPlugin(Draggable);
+
+  const characters = document.querySelectorAll(".char");
+  const charWidths = [];
+  const originalPositions = [];
+
+  // 1. Initialize positions
+  characters.forEach((char, i) => {
+    const bbox = char.getBBox();
+    charWidths.push(bbox.width + 10); // width + gap
+    originalPositions.push(bbox.x);
+    
+    // Set initial transform to prevent jumps
+    gsap.set(char, { x: 0 });
+  });
+
+  // 2. Make them Draggable
+  Draggable.create(characters, {
+    type: "x",
+    edgeResistance: 0.65,
+    dragClickables: true,
+    onDrag: function() {
+      console.log("Dragging char index:", this.target.getAttribute('data-index'), "Current X:", this.x);
+      const draggedIndex = parseInt(this.target.getAttribute('data-index'));
+      const currentX = this.x + originalPositions[draggedIndex];
+
+      characters.forEach((other, i) => {
+        if (i === draggedIndex) return;
+
+        const otherOrigX = originalPositions[i];
+        const dist = currentX - otherOrigX;
+
+        // Repelling logic: if dragged char gets close, push the others
+        if (Math.abs(dist) < 40) {
+          const pushDir = dist > 0 ? -25 : 25;
+          gsap.to(other, { 
+            x: pushDir, 
+            duration: 0.4, 
+            ease: "power2.out" 
+          });
+        } else {
+          // Snap back to neutral if no longer repelled
+          gsap.to(other, { x: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
+        }
+      });
+    },
+    onDragEnd: function() {
+      // Snap everything back to the grid
+      gsap.to(characters, { 
+        x: 0, 
+        duration: 0.8, 
+        ease: "elastic.out(1, 0.3)" 
+      });
+    }
+  });
+</script> -->
+
+
+<script>
+  // Ensure Draggable is registered
+gsap.registerPlugin(Draggable);
+
+function initSignature() {
+  const characters = document.querySelectorAll(".char");
+  
+  console.log("Found characters:", characters.length); // Should say 15+ 
+
+  if (characters.length === 0) {
+    console.error("GSAP: No elements with class '.char' found in the DOM.");
+    return;
+  }
+
+  Draggable.create(characters, {
+    type: "x",
+    edgeResistance: 0.65,
+    dragClickables: true,
+    onDragStart: function() {
+      console.log("Drag started on index:", this.target.getAttribute('data-index'));
+    },
+    onDrag: function() {
+      console.log("Dragging index:", this.target.getAttribute('data-index'), "X:", this.x);
+      
+      // The repelling logic
+      const draggedIndex = parseInt(this.target.getAttribute('data-index'));
+      characters.forEach((other, i) => {
+        if (i === draggedIndex) return;
+        const dist = this.x + (draggedIndex * 20) - (i * 20); // Simplified dist check
+        if (Math.abs(dist) < 30) {
+          gsap.to(other, { x: dist > 0 ? -20 : 20, duration: 0.2 });
+        } else {
+          gsap.to(other, { x: 0, duration: 0.5 });
+        }
+      });
+    },
+    onDragEnd: function() {
+      console.log("Drag ended");
+      gsap.to(characters, { x: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+    }
+  });
+}
+
+// Jekyll/Swup compatibility: Run after everything is settled
+if (document.readyState === "complete") {
+  initSignature();
+} else {
+  window.addEventListener("load", initSignature);
+}
+
+// If using Swup, we must re-init after every page transition
+if (typeof swup !== 'undefined') {
+  swup.hooks.on('page:view', initSignature);
+}
+</script>
 </head>
 
 <body>
   <div class="site-wrapper">
 
     <header class="site-header">
-      <h1 class="site-title"><a href="/">Sophia Diggs-Galligan</a></h1>
+      <!-- <h1 class="site-title"><a href="/">Sophia Diggs-Galligan</a></h1> -->
+
+      <h1 class="site-title">
+        <!-- <a href="/"> -->
+          <!-- <img src="{{ '/assets/images/name_letters.svg' | relative_url }}" alt="Sophia Diggs-Galligan"> -->
+           {% include name_letters.svg %}
+        <!-- </a> -->
+      </h1>
 
       <nav class="nav" id="main-nav">
         <a href="/" class="nav-item nav-about{% if page.url == '/' or page.url == '/index.html' %} active{% endif %}"
