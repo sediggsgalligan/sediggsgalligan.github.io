@@ -167,7 +167,8 @@ img {
   background: var(--svg-about-hover) no-repeat center / contain;
 }
 
-.nav-about:active .nav-shape-bg {
+.nav-about:active .nav-shape-bg,
+.nav-about.pressing .nav-shape-bg {
   background: var(--svg-about-click) no-repeat center / contain;
 }
 
@@ -189,7 +190,8 @@ img {
   background: var(--svg-projects-hover) no-repeat center / contain;
 }
 
-.nav-projects:active .nav-shape-bg {
+.nav-projects:active .nav-shape-bg,
+.nav-projects.pressing .nav-shape-bg {
   background: var(--svg-projects-click) no-repeat center / contain;
 }
 
@@ -211,7 +213,8 @@ img {
   background: var(--svg-research-hover) no-repeat center / contain;
 }
 
-.nav-research:active .nav-shape-bg {
+.nav-research:active .nav-shape-bg,
+.nav-research.pressing .nav-shape-bg {
   background: var(--svg-research-click) no-repeat center / contain;
 }
 
@@ -233,7 +236,8 @@ img {
   background: var(--svg-contact-hover) no-repeat center / contain;
 }
 
-.nav-contact:active .nav-shape-bg {
+.nav-contact:active .nav-shape-bg,
+.nav-contact.pressing .nav-shape-bg {
   background: var(--svg-contact-click) no-repeat center / contain;
 }
 
@@ -465,4 +469,81 @@ img {
 /* Optional: slightly fade the original to make the transition cleaner */
 .project-card:hover .img-default {
   opacity: 0;
+}
+
+/* =============================================
+   Initial Page Load Bar
+   ============================================= */
+#page-load-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--c-section, var(--c-about));
+  z-index: 300;
+  animation: load-bar-progress 1.8s cubic-bezier(0.1, 0.6, 0.4, 1) forwards;
+  transition: width 0.25s ease, opacity 0.4s ease;
+}
+
+#page-load-bar.done {
+  animation: none;
+  width: 100% !important;
+}
+
+#page-load-bar.fade-out {
+  opacity: 0;
+}
+
+@keyframes load-bar-progress {
+  from { width: 0%; }
+  to   { width: 82%; }
+}
+
+/* =============================================
+   Section color tokens (set via data-section on <body>)
+   ============================================= */
+body[data-section="about"]    { --c-section: var(--c-about);      --c-section-faint: rgba(224, 120, 32,  0.2); }
+body[data-section="projects"] { --c-section: var(--c-projects);   --c-section-faint: rgba(212, 160, 23,  0.2); }
+body[data-section="research"] { --c-section: var(--c-experience); --c-section-faint: rgba(58,  170, 53,  0.2); }
+body[data-section="contact"]  { --c-section: var(--c-contact);    --c-section-faint: rgba(41,  148, 168, 0.2); }
+
+/* =============================================
+   Page Loader
+   ============================================= */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+#page-loader.is-loading {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--c-section-faint, rgba(224, 120, 32, 0.2));
+  border-top-color: var(--c-section, var(--c-about));
+  border-radius: 50%;
+  animation: loader-spin 0.75s linear infinite;
+}
+
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Keep the header above the loader overlay */
+.site-header {
+  position: relative;
+  z-index: 200;
 }

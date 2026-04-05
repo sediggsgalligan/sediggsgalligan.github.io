@@ -1,4 +1,4 @@
-{% assign url = site.baseurl | append: post.url  | replace: '/index', '' %}
+<!-- {% assign url = site.baseurl | append: post.url  | replace: '/index', '' %}
 
 <article class="post_flat" onclick="window.location = '{{url}}'">
 
@@ -18,4 +18,30 @@
         </div>
     </div>
 
+</article> -->
+
+{% assign url = site.baseurl | append: post.url | replace: '/index', '' %}
+
+<article class="post_flat" onclick="window.location = '{{url}}'">
+    <div class="article_text_div">
+        <div class="article-image-wrapper">
+            <img src="/assets/images/{{post.image}}" class="img-default" alt="{{post.title}}">
+            
+            <!-- {% if post.image_active %} -->
+            <img src="/assets/images/{{post.image_active}}" class="img-active" alt="{{post.title}}">
+            <!-- {% endif %} -->
+        </div>
+
+        <div>
+            <h1>
+                <a href="{{url}}">
+                    <span class="post_emoji"></span>
+                    {{ post.title | markdownify | remove: '<p>' | remove: '</p>' }}
+                </a>
+            </h1>
+            <p>
+                {{ post.description | markdownify }}
+            </p>
+        </div>
+    </div>
 </article>

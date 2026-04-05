@@ -44,8 +44,34 @@
   }
 
   // Hook into Swup's lifecycle
-  swup.hooks.on('page:view', updateActiveNav);
-  
+  swup.hooks.on('visit:start', (visit) => {
+    document.getElementById('page-loader').classList.add('is-loading');
+
+    // Hold the clicked button in its pressed state while loading
+    const dest = visit.to.url;
+
+    // Update body section for spinner color
+    let section = 'about';
+    if (dest === '/' || dest === '/index.html') section = 'about';
+    else if (dest.startsWith('/projects')) section = 'projects';
+    else if (dest.startsWith('/research')) section = 'research';
+    else if (dest.startsWith('/contact')) section = 'contact';
+    document.body.dataset.section = section;
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const href = item.getAttribute('href');
+      const isHome = dest === '/' || dest === '/index.html';
+      const isMatch = (href === '/' && isHome) || (href !== '/' && dest.startsWith(href));
+      item.classList.toggle('pressing', isMatch);
+    });
+  });
+
+  swup.hooks.on('page:view', () => {
+    document.getElementById('page-loader').classList.remove('is-loading');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('pressing'));
+    updateActiveNav();
+  });
+
   // Run once on initial page load
   window.addEventListener('DOMContentLoaded', updateActiveNav);
 </script>
@@ -173,9 +199,27 @@ if (typeof swup !== 'undefined') {
   swup.hooks.on('page:view', initSignature);
 }
 </script>
+
+<script>
+  // Initial page load bar
+  window.addEventListener('load', () => {
+    const bar = document.getElementById('page-load-bar');
+    if (!bar) return;
+    bar.classList.add('done');
+    setTimeout(() => {
+      bar.classList.add('fade-out');
+      setTimeout(() => bar.remove(), 400);
+    }, 200);
+  });
+</script>
 </head>
 
-<body>
+<body data-section="{% if page.url == '/' or page.url == '/index.html' %}about{% elsif page.url contains 'projects' %}projects{% elsif page.url contains 'research' %}research{% elsif page.url contains 'contact' %}contact{% else %}about{% endif %}">
+  <div id="page-load-bar"></div>
+  <div id="page-loader" aria-label="Loading" role="status">
+    <div class="loader-spinner"></div>
+  </div>
+
   <div class="site-wrapper">
 
     <header class="site-header">

@@ -33,6 +33,17 @@
   transform: translate(-5px, 5px);
 }
 
+.nav-item.pressing #about_active,
+.nav-item.pressing #projects_active,
+.nav-item.pressing #research_active,
+.nav-item.pressing #contact_active {
+  display: block;
+}
+
+.nav-item.pressing .fg {
+  transform: translate(-5px, 5px);
+}
+
 /* --- 3. Optional: Smooth "Entry" Animation --- */
 /* This makes the button pop slightly when the page loads/swaps */
 @keyframes buttonLoad {
