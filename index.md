@@ -6,7 +6,7 @@ permalink: /
 
 <div class="about-layout">
   <div class="about-photo">
-    <img src="/assets/images/sophia_pic.png" alt="Photo of Sophia Diggs-Galligan">
+    <img src="/assets/images/sophia_pic.webp" alt="Illustration of Sophia Diggs-Galligan" loading="lazy">
   </div>
 
   <div class="about-text">

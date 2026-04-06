@@ -17,8 +17,11 @@
   <link rel="stylesheet" href="/assets/css/buttons.css">
 
   <script src="https://unpkg.com/swup@4"></script>
+  <script src="https://unpkg.com/@swup/preload-plugin@3"></script>
   <script>
-  const swup = new Swup();
+  const swup = new Swup({
+    plugins: [new SwupPreloadPlugin()]
+  });
 
   function updateActiveNav() {
     const currentPath = window.location.pathname;
@@ -70,6 +73,15 @@
     document.getElementById('page-loader').classList.remove('is-loading');
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('pressing'));
     updateActiveNav();
+
+  const images = document.querySelectorAll('#swup img');
+    images.forEach(img => {
+      // Clone the image and replace the old one to force a re-render
+      const parent = img.parentNode;
+      const newImg = img.cloneNode(true);
+      parent.replaceChild(newImg, img);
+    });
+    
   });
 
   // Run once on initial page load
@@ -348,21 +360,21 @@ if (typeof swup !== 'undefined') {
 
       <nav class="nav" id="main-nav">
         <a href="/" class="nav-item nav-about{% if page.url == '/' or page.url == '/index.html' %} active{% endif %}"
-          id="about_button">
+          id="about_button" data-swup-preload>
           {% include cardboard_buttons/about.svg %}
         </a>
         <a href="/projects" class="nav-item nav-projects{% if page.url contains 'projects' %} active{% endif %}"
-          id="projects_button">
+          id="projects_button" data-swup-preload>
           {% include cardboard_buttons/projects.svg %}
 
         </a>
         <a href="/research" class="nav-item nav-research{% if page.url contains 'research' %} active{% endif %}"
-          id="research_button">
+          id="research_button" data-swup-preload>
           {% include cardboard_buttons/research.svg %}
 
         </a>
         <a href="/contact" class="nav-item nav-contact{% if page.url contains 'contact' %} active{% endif %}"
-          id="contact_button">
+          id="contact_button" data-swup-preload>
           {% include cardboard_buttons/contact.svg %}
         </a>
       </nav>
