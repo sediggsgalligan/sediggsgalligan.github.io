@@ -105,6 +105,17 @@ img {
   color: inherit;
 }
 
+.site-title {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%); /* break out of margin container */
+  overflow: visible;
+}
+
+.site-title svg {
+  display: block;
+  overflow: visible; /* lets dragged chars paint outside the SVG box */
+}
+
 /* =============================================
    Navigation
    ============================================= */

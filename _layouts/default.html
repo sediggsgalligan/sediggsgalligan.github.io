@@ -148,15 +148,40 @@
 
 gsap.registerPlugin(Draggable);
 
-function initSignature() {
+let draggableInstances = [];
+
+function measureOrigins() {
   const svg = document.querySelector('.site-title svg');
   const characters = Array.from(document.querySelectorAll('.char'));
-
-  if (!svg || characters.length === 0) return;
+  if (!svg || characters.length === 0) return null;
 
   const svgRect = svg.getBoundingClientRect();
+  return {
+    svg,
+    characters,
+    origins: characters.map(el => {
+      const r = el.getBoundingClientRect();
+      return {
+        cx: (r.left + r.width / 2) - svgRect.left,
+        width: r.width
+      };
+    })
+  };
+}
 
-  // Each char's natural center x in SVG-relative space
+function initSignature() {
+  draggableInstances.forEach(d => d.kill());
+  draggableInstances = [];
+
+  const svg = document.querySelector('.site-title svg');
+  const characters = Array.from(document.querySelectorAll('.char'));
+  if (!svg || characters.length === 0) return;
+
+  // 1. Reset all transforms so getBoundingClientRect reflects true painted positions
+  characters.forEach(el => gsap.set(el, { x: 0, y: 0 }));
+
+  // 2. Measure origins from the now-clean positions
+  const svgRect = svg.getBoundingClientRect();
   const origins = characters.map(el => {
     const r = el.getBoundingClientRect();
     return {
@@ -165,21 +190,22 @@ function initSignature() {
     };
   });
 
-  // Slots = the original painted positions, sorted left to right
-  // order[slotIdx] = charIdx currently occupying that slot
   let order = characters.map((_, i) => i);
   let draggingEl = null;
   let dragSlot = null;
 
-  // Per-char lerp state: offset from their origin (in px)
+  // 3. Anim state starts at 0 (transforms were just cleared)
   const anim = characters.map(() => ({ current: 0, target: 0 }));
 
-  // Apply an x offset to a <g> via transform
-  function setX(el, px) {
-    gsap.set(el, { x: px });
-  }
+  // 4. Immediately snap each char to its correct slot offset for the current order
+  //    (no animation — just correct the positions instantly on resize)
+  order.forEach((charIdx, slotIdx) => {
+    const targetOffset = origins[slotIdx].cx - origins[charIdx].cx;
+    anim[charIdx].current = targetOffset;
+    anim[charIdx].target = targetOffset;
+    gsap.set(characters[charIdx], { x: targetOffset });
+  });
 
-  // Physics loop — lerp non-dragged chars toward their target offset
   let rafId;
   function startLoop() {
     cancelAnimationFrame(rafId);
@@ -187,12 +213,11 @@ function initSignature() {
       order.forEach((charIdx, slotIdx) => {
         if (characters[charIdx] === draggingEl) return;
         const a = anim[charIdx];
-        // Target offset = difference between assigned slot's center and this char's natural center
         a.target = origins[slotIdx].cx - origins[charIdx].cx;
         const diff = a.target - a.current;
         if (Math.abs(diff) > 0.1) {
           a.current += diff * 0.18;
-          setX(characters[charIdx], a.current);
+          gsap.set(characters[charIdx], { x: a.current });
         }
       });
       rafId = requestAnimationFrame(loop);
@@ -201,7 +226,7 @@ function initSignature() {
   }
   startLoop();
 
-  Draggable.create(characters, {
+  const instances = Draggable.create(characters, {
     type: 'x,y',
     dragClickables: true,
     zIndexBoost: true,
@@ -215,17 +240,13 @@ function initSignature() {
 
     onDrag: function() {
       const charIdx = characters.indexOf(this.target);
-
-      // Current center of the dragged element in SVG space
       const svgRectNow = svg.getBoundingClientRect();
       const elRect = this.target.getBoundingClientRect();
       const elCenterX = (elRect.left + elRect.width / 2) - svgRectNow.left;
 
-      // Find nearest slot by comparing to each slot's natural center
       let nearest = 0, nearestDist = Infinity;
       order.forEach((_, slotIdx) => {
-        const slotCx = origins[slotIdx].cx;
-        const d = Math.abs(slotCx - elCenterX);
+        const d = Math.abs(origins[slotIdx].cx - elCenterX);
         if (d < nearestDist) { nearestDist = d; nearest = slotIdx; }
       });
 
@@ -242,9 +263,6 @@ function initSignature() {
     onDragEnd: function() {
       const charIdx = characters.indexOf(this.target);
       const targetOffsetX = origins[dragSlot].cx - origins[charIdx].cx;
-      const targetOffsetY = 0;
-
-      // Read current gsap x,y so elastic starts from where the drag ended
       const currentX = gsap.getProperty(this.target, 'x');
       const currentY = gsap.getProperty(this.target, 'y');
 
@@ -252,7 +270,7 @@ function initSignature() {
         { x: currentX, y: currentY },
         {
           x: targetOffsetX,
-          y: targetOffsetY,
+          y: 0,
           duration: 0.7,
           ease: 'elastic.out(1, 0.4)',
           onUpdate: () => {
@@ -268,7 +286,20 @@ function initSignature() {
       );
     }
   });
+
+  draggableInstances = instances;
 }
+
+// Debounced resize handler
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    // Don't re-init mid-drag
+    if (document.querySelector('.char.dragging')) return;
+    initSignature();
+  }, 150);
+});
 
 // Jekyll/Swup compatibility: Run after everything is settled
 if (document.readyState === "complete") {
