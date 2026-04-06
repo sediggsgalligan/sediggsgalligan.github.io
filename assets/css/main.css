@@ -78,7 +78,7 @@ img {
   padding: 2rem 2rem 4rem;
 }
 
-.about-layout {
+.about-layout, .plain-page {
   max-width: 960px;
   margin: 0 auto;
   padding: 2rem 2rem 4rem;
@@ -314,11 +314,11 @@ img {
   /* background: #e8e0d4; */
 }
 
-.project-card-body h2 {
+/* .project-card-body h2 {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   margin-bottom: 0.4rem;
-}
+} */
 
 .project-card-body p {
   font-size: 1rem;

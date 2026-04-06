@@ -85,104 +85,187 @@
   .char:active { cursor: grabbing; }
 </style>
 
-<!-- <script>
-  gsap.registerPlugin(Draggable);
-
-  const characters = document.querySelectorAll(".char");
-  const charWidths = [];
-  const originalPositions = [];
-
-  // 1. Initialize positions
-  characters.forEach((char, i) => {
-    const bbox = char.getBBox();
-    charWidths.push(bbox.width + 10); // width + gap
-    originalPositions.push(bbox.x);
-    
-    // Set initial transform to prevent jumps
-    gsap.set(char, { x: 0 });
-  });
-
-  // 2. Make them Draggable
-  Draggable.create(characters, {
-    type: "x",
-    edgeResistance: 0.65,
-    dragClickables: true,
-    onDrag: function() {
-      console.log("Dragging char index:", this.target.getAttribute('data-index'), "Current X:", this.x);
-      const draggedIndex = parseInt(this.target.getAttribute('data-index'));
-      const currentX = this.x + originalPositions[draggedIndex];
-
-      characters.forEach((other, i) => {
-        if (i === draggedIndex) return;
-
-        const otherOrigX = originalPositions[i];
-        const dist = currentX - otherOrigX;
-
-        // Repelling logic: if dragged char gets close, push the others
-        if (Math.abs(dist) < 40) {
-          const pushDir = dist > 0 ? -25 : 25;
-          gsap.to(other, { 
-            x: pushDir, 
-            duration: 0.4, 
-            ease: "power2.out" 
-          });
-        } else {
-          // Snap back to neutral if no longer repelled
-          gsap.to(other, { x: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
-        }
-      });
-    },
-    onDragEnd: function() {
-      // Snap everything back to the grid
-      gsap.to(characters, { 
-        x: 0, 
-        duration: 0.8, 
-        ease: "elastic.out(1, 0.3)" 
-      });
-    }
-  });
-</script> -->
-
 
 <script>
   // Ensure Draggable is registered
+// gsap.registerPlugin(Draggable);
+
+// function initSignature() {
+//   const characters = document.querySelectorAll(".char");
+  
+//   console.log("Found characters:", characters.length); // Should say 15+ 
+
+//   if (characters.length === 0) {
+//     console.error("GSAP: No elements with class '.char' found in the DOM.");
+//     return;
+//   }
+
+//   Draggable.create(characters, {
+//     type: "x",
+//     edgeResistance: 0.65,
+//     dragClickables: true,
+//     onDragStart: function() {
+//       console.log("Drag started on index:", this.target.getAttribute('data-index'));
+//     },
+//     // onDrag: function() {
+//     //   console.log("Dragging index:", this.target.getAttribute('data-index'), "X:", this.x);
+      
+//     //   // The repelling logic
+//     //   const draggedIndex = parseInt(this.target.getAttribute('data-index'));
+//     //   characters.forEach((other, i) => {
+//     //     if (i === draggedIndex) return;
+//     //     const dist = this.x + (draggedIndex * 20) - (i * 20); // Simplified dist check
+//     //     if (Math.abs(dist) < 30) {
+//     //       gsap.to(other, { x: dist > 0 ? -20 : 20, duration: 0.2 });
+//     //     } else {
+//     //       gsap.to(other, { x: 0, duration: 0.5 });
+//     //     }
+//     //   });
+//     // },
+//     onDrag: function() {
+//     const draggedRect = this.target.getBoundingClientRect();
+//     const draggedCenter = draggedRect.left + draggedRect.width / 2;
+
+//     characters.forEach((other, i) => {
+//       if (other === this.target) return;
+//       const otherRect = other.getBoundingClientRect();
+//       const otherCenter = otherRect.left + otherRect.width / 2;
+//       const dist = draggedCenter - otherCenter;
+
+//       if (Math.abs(dist) < 40) { // 40px proximity threshold
+//         gsap.to(other, { x: dist > 0 ? -25 : 25, duration: 0.2 });
+//       } else {
+//         gsap.to(other, { x: 0, duration: 0.5 });
+//       }
+//     });
+//   },
+//     onDragEnd: function() {
+//       console.log("Drag ended");
+//       gsap.to(characters, { x: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+//     }
+//   });
+// }
+
 gsap.registerPlugin(Draggable);
 
 function initSignature() {
-  const characters = document.querySelectorAll(".char");
-  
-  console.log("Found characters:", characters.length); // Should say 15+ 
+  const svg = document.querySelector('.site-title svg');
+  const characters = Array.from(document.querySelectorAll('.char'));
 
-  if (characters.length === 0) {
-    console.error("GSAP: No elements with class '.char' found in the DOM.");
-    return;
+  if (!svg || characters.length === 0) return;
+
+  const svgRect = svg.getBoundingClientRect();
+
+  // Each char's natural center x in SVG-relative space
+  const origins = characters.map(el => {
+    const r = el.getBoundingClientRect();
+    return {
+      cx: (r.left + r.width / 2) - svgRect.left,
+      width: r.width
+    };
+  });
+
+  // Slots = the original painted positions, sorted left to right
+  // order[slotIdx] = charIdx currently occupying that slot
+  let order = characters.map((_, i) => i);
+  let draggingEl = null;
+  let dragSlot = null;
+
+  // Per-char lerp state: offset from their origin (in px)
+  const anim = characters.map(() => ({ current: 0, target: 0 }));
+
+  // Apply an x offset to a <g> via transform
+  function setX(el, px) {
+    gsap.set(el, { x: px });
   }
 
-  Draggable.create(characters, {
-    type: "x",
-    edgeResistance: 0.65,
-    dragClickables: true,
-    onDragStart: function() {
-      console.log("Drag started on index:", this.target.getAttribute('data-index'));
-    },
-    onDrag: function() {
-      console.log("Dragging index:", this.target.getAttribute('data-index'), "X:", this.x);
-      
-      // The repelling logic
-      const draggedIndex = parseInt(this.target.getAttribute('data-index'));
-      characters.forEach((other, i) => {
-        if (i === draggedIndex) return;
-        const dist = this.x + (draggedIndex * 20) - (i * 20); // Simplified dist check
-        if (Math.abs(dist) < 30) {
-          gsap.to(other, { x: dist > 0 ? -20 : 20, duration: 0.2 });
-        } else {
-          gsap.to(other, { x: 0, duration: 0.5 });
+  // Physics loop — lerp non-dragged chars toward their target offset
+  let rafId;
+  function startLoop() {
+    cancelAnimationFrame(rafId);
+    function loop() {
+      order.forEach((charIdx, slotIdx) => {
+        if (characters[charIdx] === draggingEl) return;
+        const a = anim[charIdx];
+        // Target offset = difference between assigned slot's center and this char's natural center
+        a.target = origins[slotIdx].cx - origins[charIdx].cx;
+        const diff = a.target - a.current;
+        if (Math.abs(diff) > 0.1) {
+          a.current += diff * 0.18;
+          setX(characters[charIdx], a.current);
         }
       });
+      rafId = requestAnimationFrame(loop);
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+  startLoop();
+
+  Draggable.create(characters, {
+    type: 'x,y',
+    dragClickables: true,
+    zIndexBoost: true,
+
+    onDragStart: function() {
+      draggingEl = this.target;
+      const charIdx = characters.indexOf(this.target);
+      dragSlot = order.indexOf(charIdx);
+      gsap.set(this.target, { zIndex: 100 });
     },
+
+    onDrag: function() {
+      const charIdx = characters.indexOf(this.target);
+
+      // Current center of the dragged element in SVG space
+      const svgRectNow = svg.getBoundingClientRect();
+      const elRect = this.target.getBoundingClientRect();
+      const elCenterX = (elRect.left + elRect.width / 2) - svgRectNow.left;
+
+      // Find nearest slot by comparing to each slot's natural center
+      let nearest = 0, nearestDist = Infinity;
+      order.forEach((_, slotIdx) => {
+        const slotCx = origins[slotIdx].cx;
+        const d = Math.abs(slotCx - elCenterX);
+        if (d < nearestDist) { nearestDist = d; nearest = slotIdx; }
+      });
+
+      if (nearest !== dragSlot) {
+        const newOrder = [...order];
+        const fromIdx = newOrder.indexOf(charIdx);
+        newOrder.splice(fromIdx, 1);
+        newOrder.splice(nearest, 0, charIdx);
+        order = newOrder;
+        dragSlot = nearest;
+      }
+    },
+
     onDragEnd: function() {
-      console.log("Drag ended");
-      gsap.to(characters, { x: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+      const charIdx = characters.indexOf(this.target);
+      const targetOffsetX = origins[dragSlot].cx - origins[charIdx].cx;
+      const targetOffsetY = 0;
+
+      // Read current gsap x,y so elastic starts from where the drag ended
+      const currentX = gsap.getProperty(this.target, 'x');
+      const currentY = gsap.getProperty(this.target, 'y');
+
+      gsap.fromTo(this.target,
+        { x: currentX, y: currentY },
+        {
+          x: targetOffsetX,
+          y: targetOffsetY,
+          duration: 0.7,
+          ease: 'elastic.out(1, 0.4)',
+          onUpdate: () => {
+            anim[charIdx].current = gsap.getProperty(this.target, 'x');
+          },
+          onComplete: () => {
+            anim[charIdx].current = targetOffsetX;
+            anim[charIdx].target = targetOffsetX;
+            gsap.set(this.target, { zIndex: '' });
+            draggingEl = null;
+          }
+        }
+      );
     }
   });
 }

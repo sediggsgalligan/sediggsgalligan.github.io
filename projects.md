@@ -4,6 +4,10 @@ title: Projects
 permalink: /projects
 ---
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 <style>
   /* The Parent Grid */
 .projects-grid {
@@ -57,13 +61,14 @@ permalink: /projects
   opacity: 1;
 }
 
-/* Title Styling */
-.project-title {
+  /* Title Styling */
+ h2.project-title {
   margin-top: 15px;
-  font-size: 1.2rem;
+  font-size: 2rem;
   text-align: left;
-  font-family: 'Commissioner', sans-serif; /* Matching your default.html fonts */
-}
+  /* font-family: 'Merriweather', serif; */
+  font-family: 'Montserrat', sans-serif;
+ }
 
 /* Mobile Responsive: Drop to 1 per row on small screens */
 @media (max-width: 768px) {
@@ -75,6 +80,9 @@ permalink: /projects
 
 .project-card-img.pillowfort {
   transform: scale(0.9) translateY(15%) translateX(6%);
+}
+.project-card-img.img-active.wovenpoem {
+  transform: scale(0.98) translateY(1%) translateX(1%);
 }
 </style>
 
@@ -92,7 +100,7 @@ permalink: /projects
           >
           
           <img
-            class="project-card-img img-active" 
+            class="project-card-img img-active {{ project.css_class }}" 
             src="{{ project.image_active }}"
             alt="{{ project.title }} active"
           >
