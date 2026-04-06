@@ -578,20 +578,66 @@ body[data-section="contact"]  { --c-section: var(--c-contact);    --c-section-fa
   }
 }
 
-/* The Individual Card */
+/* 1. Base Grid - Wide screens (3 columns) */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+  gap: 40px;
+  padding: 20px 0;
+  margin: 0 auto;
+  width: 90%; /* Increased from 80% to give 3 columns more room */
+  margin-top: -5rem;
+}
+
+/* 2. Tablet View (2 columns) */
+@media (max-width: 1100px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 85%;
+  }
+  
+  h2.project-title {
+    font-size: 1.75rem; /* Slightly smaller text for 2-column layout */
+  }
+}
+
+/* 3. Mobile View (1 column) */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    width: 95%;
+  }
+
+  /* Ensure text is very legible on small screens */
+  h2.project-title {
+    font-size: 1.5rem;
+    margin-top: 10px;
+  }
+
+  .project-card {
+    max-height: none; /* Let the card grow vertically on mobile */
+  }
+
+  .project-card-img-container {
+    aspect-ratio: 0.8; /* Slightly taller aspect ratio for phone screens */
+  }
+}
+
+/* Maintain your existing Image and Hover Logic */
 .project-card {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  max-height: 60vh;
+  max-height: 70vh;
 }
 
-/* Image Container Sizing */
 .project-card-img-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 0.6;
+  aspect-ratio: 0.6; /* Keeps the tall, cinematic feel */
   overflow: hidden;
+  max-height: 60vh;
 }
 
 .project-card-img {
@@ -599,13 +645,18 @@ body[data-section="contact"]  { --c-section: var(--c-contact);    --c-section-fa
   height: 100%;
   object-fit: contain;
   transition: opacity 0.3s ease-in-out;
-
-  min-height: 1px;
-  min-width: 1px;
-  display: block !important;
+  display: block;
 }
 
-/* Hover Swap Logic */
+h2.project-title {
+  margin-top: 15px;
+  font-size: 2rem;
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.2;
+}
+
+/* Hover Swap Logic stays the same */
 .img-active {
   position: absolute;
   top: 0;
@@ -613,24 +664,17 @@ body[data-section="contact"]  { --c-section: var(--c-contact);    --c-section-fa
   opacity: 0;
 }
 
-.project-card-img-container:hover .img-active {
+.project-card-img-container:hover .img-active, .project-card.is-visible .img-active {
   opacity: 1;
 }
 
-  /* Title Styling */
- h2.project-title {
-  margin-top: 15px;
-  font-size: 2rem;
-  text-align: left;
-  /* font-family: 'Merriweather', serif; */
-  font-family: 'Montserrat', sans-serif;
- }
+.project-card:hover .img-default, .project-card.is-visible .img-default {
+  opacity: 0;
+}
 
-/* Mobile Responsive: Drop to 1 per row on small screens */
-@media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
+@media (hover: none) {
+  .project-card-img {
+    transition: opacity 0.5s ease-in-out;
   }
 }
 
