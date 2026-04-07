@@ -309,6 +309,8 @@ function measureOrigins() {
   };
 }
 
+const SOPHIA = "SOPHIADIGGS-GALLIGAN";
+
 function initSignature() {
   draggableInstances.forEach(d => d.kill());
   draggableInstances = [];
@@ -421,6 +423,9 @@ function initSignature() {
             anim[charIdx].target = targetOffsetX;
             gsap.set(this.target, { zIndex: '' });
             draggingEl = null;
+
+            
+            check_resorted_for_easter_eggs(order.map(i => SOPHIA[i]).join(''));
           }
         }
       );
@@ -428,6 +433,62 @@ function initSignature() {
   });
 
   draggableInstances = instances;
+}
+
+function check_resorted_for_easter_eggs(order) {
+  const easterEggs = {
+    "SOPHIADIGGS-GALLIGAN": "You found the original order! Hello again, Sophia.",
+    "NAGILLAG-SGGIDAIHPOS": "Backwards! A mirror universe Sophia sends her regards.",
+    "AAADGGGGHIIILLNOPSS": "Alphabetized"
+  };
+
+  order_no_dash = order.replace(/-/g, '');
+  // console.log(easterEggs[order] || easterEggs[order_no_dash] || `Current order: ${order}`);
+
+  if (order === "NAGILLAG-SGGIDAIHPOS") {
+    // Apply a horizontal flip to the entire page
+    gsap.to("body", {
+      scaleX: -1,
+      duration: 1,
+      ease: "power2.inOut"
+    });
+
+  }
+  
+  if (order_no_dash === "AAADGGGGHIIILLNOPSS") {
+    const chars = document.querySelectorAll('.char');
+    initSignature();
+      chars.forEach((char, i) => {
+          // One color per character
+          const letterColor = `hsl(${(i * 30) % 360}, 80%, 60%)`; // (i * 30) creates a rainbow gradient across the word
+          const paths = char.querySelectorAll('path');
+
+          // Animate the paths as a unit
+          gsap.to(paths, {
+              // Wave movement: move up and down
+              y: -20, 
+              
+              // Apply the shared color
+              stroke: letterColor,
+              
+              duration: 0.6,
+              ease: "sine.inOut",
+              repeat: -1, // Infinite wave
+              yoyo: true,
+              
+              // The magic: stagger the start time based on the character's index
+              delay: i * 0.1, 
+              
+              onStart: () => {
+                  paths.forEach(p => {
+                      // Force clear inline styles so GSAP takes over
+                      p.style.removeProperty('stroke');
+                      p.style.removeProperty('stroke-width');
+                  });
+              }
+          });
+      });
+  }
 }
 
 // Debounced resize handler
