@@ -4,40 +4,6 @@ title: Projects
 permalink: /projects
 ---
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-  // Check if the device is a touch/no-hover device
-  const isTouchDevice = window.matchMedia("(hover: none)").matches;
-
-  if (isTouchDevice) {
-    const cards = document.querySelectorAll('.project-card');
-
-    const observerOptions = {
-      root: null,
-      threshold: 0.8 
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          entry.target.classList.remove('is-visible');
-        }
-      });
-    }, observerOptions);
-
-    cards.forEach(card => observer.observe(card));
-
-  // add transition delay to each card for staggered effect
-    const allCards = document.querySelectorAll('.project-card');
-    allCards.forEach((card, index) => {
-      card.style.transitionDelay = `${index * 100}ms`;
-    });
-  }
-});
-</script>
-
 <div class="projects-grid">
   {% assign all_projects = site.projects | where_exp: "item", "item.path contains '_projects'" %}
   

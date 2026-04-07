@@ -555,6 +555,7 @@ h2.project-title {
   top: 0;
   left: 0;
   opacity: 0;
+  transition: opacity 0.8s ease-in-out;
 }
 
 .project-card-img-container:hover .img-active, .project-card.is-visible .img-active {
