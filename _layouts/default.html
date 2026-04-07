@@ -221,70 +221,23 @@ document.addEventListener('DOMContentLoaded', handleSvgViewbox);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
 
 <style>
-  .char { cursor: grab; }
-  .char:active { cursor: grabbing; }
+.char {
+  cursor: grab;
+  display: inline-block; 
+  background-color: transparent; 
+}
+
+.char path {
+  pointer-events: auto; 
+}
+
+.char:active {
+  cursor: grabbing;
+}
 </style>
 
 
-<script>
-  // Ensure Draggable is registered
-// gsap.registerPlugin(Draggable);
-
-// function initSignature() {
-//   const characters = document.querySelectorAll(".char");
-  
-//   console.log("Found characters:", characters.length); // Should say 15+ 
-
-//   if (characters.length === 0) {
-//     console.error("GSAP: No elements with class '.char' found in the DOM.");
-//     return;
-//   }
-
-//   Draggable.create(characters, {
-//     type: "x",
-//     edgeResistance: 0.65,
-//     dragClickables: true,
-//     onDragStart: function() {
-//       console.log("Drag started on index:", this.target.getAttribute('data-index'));
-//     },
-//     // onDrag: function() {
-//     //   console.log("Dragging index:", this.target.getAttribute('data-index'), "X:", this.x);
-      
-//     //   // The repelling logic
-//     //   const draggedIndex = parseInt(this.target.getAttribute('data-index'));
-//     //   characters.forEach((other, i) => {
-//     //     if (i === draggedIndex) return;
-//     //     const dist = this.x + (draggedIndex * 20) - (i * 20); // Simplified dist check
-//     //     if (Math.abs(dist) < 30) {
-//     //       gsap.to(other, { x: dist > 0 ? -20 : 20, duration: 0.2 });
-//     //     } else {
-//     //       gsap.to(other, { x: 0, duration: 0.5 });
-//     //     }
-//     //   });
-//     // },
-//     onDrag: function() {
-//     const draggedRect = this.target.getBoundingClientRect();
-//     const draggedCenter = draggedRect.left + draggedRect.width / 2;
-
-//     characters.forEach((other, i) => {
-//       if (other === this.target) return;
-//       const otherRect = other.getBoundingClientRect();
-//       const otherCenter = otherRect.left + otherRect.width / 2;
-//       const dist = draggedCenter - otherCenter;
-
-//       if (Math.abs(dist) < 40) { // 40px proximity threshold
-//         gsap.to(other, { x: dist > 0 ? -25 : 25, duration: 0.2 });
-//       } else {
-//         gsap.to(other, { x: 0, duration: 0.5 });
-//       }
-//     });
-//   },
-//     onDragEnd: function() {
-//       console.log("Drag ended");
-//       gsap.to(characters, { x: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
-//     }
-//   });
-// }
+<!-- <script>
 
 gsap.registerPlugin(Draggable);
 
@@ -314,6 +267,26 @@ const SOPHIA = "SOPHIADIGGS-GALLIGAN";
 function initSignature() {
   draggableInstances.forEach(d => d.kill());
   draggableInstances = [];
+
+  const chars = document.querySelectorAll('.char');
+  chars.forEach(char => {
+    // Create an invisible rectangle that matches the letter's size
+    const bbox = char.getBBox();
+    const hitBox = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+    // Check if there is a hitbox already (in case of re-init) and skip if so
+    if (char.querySelector('rect')) return;
+    
+    hitBox.setAttribute("x", bbox.x);
+    hitBox.setAttribute("y", bbox.y);
+    hitBox.setAttribute("width", bbox.width);
+    hitBox.setAttribute("height", bbox.height);
+    hitBox.setAttribute("fill", "transparent"); // Invisible but clickable
+    hitBox.style.pointerEvents = "all";
+    
+    // Put it at the beginning of the character group
+    char.insertBefore(hitBox, char.firstChild);
+  });
 
   const svg = document.querySelector('.site-title svg');
   const characters = Array.from(document.querySelectorAll('.char'));
@@ -433,6 +406,7 @@ function initSignature() {
   });
 
   draggableInstances = instances;
+  triggerWelcomeWiggle();
 }
 
 function check_resorted_for_easter_eggs(order) {
@@ -491,6 +465,33 @@ function check_resorted_for_easter_eggs(order) {
   }
 }
 
+function triggerWelcomeWiggle() {
+  const characters = document.querySelectorAll('.char');
+  
+  characters.forEach((char, i) => {
+    // Create a unique timeline for THIS character
+    const tl = gsap.timeline({
+      delay: i * 0.08 // This is the "magic" delay that creates the wave flow
+    });
+
+    tl.to(char, {
+      y: -7,           // 1. Pop UP
+      duration: 0.2,
+      ease: "sine.out"
+    })
+    .to(char, {
+      y: 3,            // 2. Plunge DOWN
+      duration: 0.35,
+      ease: "sine.inOut"
+    })
+    .to(char, {
+      y: 0,             // 3. Snap back to CENTER
+      duration: 0.4,
+      ease: "back.out(2)" 
+    });
+  });
+}
+
 // Debounced resize handler
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -510,6 +511,182 @@ if (document.readyState === "complete") {
 }
 
 // If using Swup, we must re-init after every page transition
+if (typeof swup !== 'undefined') {
+  swup.hooks.on('page:view', initSignature);
+}
+</script> -->
+
+<script>
+gsap.registerPlugin(Draggable);
+
+let draggableInstances = [];
+const SOPHIA = "SOPHIADIGGS-GALLIGAN";
+
+function initSignature() {
+  draggableInstances.forEach(d => d.kill());
+  draggableInstances = [];
+
+  const svg = document.querySelector('.site-title svg');
+  const characters = Array.from(document.querySelectorAll('.char'));
+  if (!svg || characters.length === 0) return;
+
+  // 1. Measure natural design
+  gsap.set(characters, { x: 0, y: 0 });
+
+  const charData = characters.map((el, i) => {
+    const box = el.getBBox();
+    
+    if (!el.querySelector('rect.hitbox')) {
+      const hitBox = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      hitBox.setAttribute("class", "hitbox");
+      hitBox.setAttribute("x", box.x);
+      hitBox.setAttribute("y", box.y);
+      hitBox.setAttribute("width", box.width);
+      hitBox.setAttribute("height", box.height);
+      hitBox.setAttribute("fill", "transparent");
+      hitBox.style.pointerEvents = "all";
+      el.insertBefore(hitBox, el.firstChild);
+    }
+
+    return {
+      el: el,
+      width: box.width,
+      naturalX: box.x,
+      // Capture original spacing between letters
+      nextGap: (i < characters.length - 1) 
+        ? (characters[i+1].getBBox().x - (box.x + box.width)) 
+        : 0
+    };
+  });
+
+  const originX = charData[0].naturalX;
+  let order = characters.map((_, i) => i);
+  let draggingEl = null;
+  const animState = characters.map(() => ({ current: 0 }));
+
+  function getDynamicPositions(currentOrder) {
+    let cursor = originX;
+    return currentOrder.map((charIdx, i) => {
+      const xPos = cursor;
+      const gap = charData[i] ? charData[i].nextGap : 0;
+      cursor += charData[charIdx].width + gap;
+      return xPos;
+    });
+  }
+
+  // 2. Animation Loop
+  function updatePositions() {
+    const slotXPositions = getDynamicPositions(order);
+    order.forEach((charIdx, slotIdx) => {
+      if (characters[charIdx] === draggingEl) return;
+      const char = charData[charIdx];
+      const targetOffset = slotXPositions[slotIdx] - char.naturalX;
+      const diff = targetOffset - animState[charIdx].current;
+      if (Math.abs(diff) > 0.01) {
+        animState[charIdx].current += diff * 0.18;
+        gsap.set(char.el, { x: animState[charIdx].current });
+      }
+    });
+    requestAnimationFrame(updatePositions);
+  }
+  requestAnimationFrame(updatePositions);
+
+  // 3. Draggable
+  draggableInstances = Draggable.create(characters, {
+    type: "x,y",
+    onDragStart: function() {
+      draggingEl = this.target;
+      gsap.set(this.target, { zIndex: 100 });
+    },
+    onDrag: function() {
+      const charIdx = characters.indexOf(this.target);
+      const currentVisualX = charData[charIdx].naturalX + gsap.getProperty(this.target, "x");
+      const slots = getDynamicPositions(order);
+      let nearestSlot = 0;
+      let minDistance = Infinity;
+      slots.forEach((slotX, i) => {
+        const dist = Math.abs(slotX - currentVisualX);
+        if (dist < minDistance) { minDistance = dist; nearestSlot = i; }
+      });
+      const currentSlot = order.indexOf(charIdx);
+      if (nearestSlot !== currentSlot) {
+        order.splice(currentSlot, 1);
+        order.splice(nearestSlot, 0, charIdx);
+      }
+    },
+    onDragEnd: function() {
+      const charIdx = characters.indexOf(this.target);
+      const slots = getDynamicPositions(order);
+      const slotIdx = order.indexOf(charIdx);
+      const finalOffset = slots[slotIdx] - charData[charIdx].naturalX;
+      gsap.to(this.target, {
+        x: finalOffset, y: 0, duration: 0.6, ease: "elastic.out(1, 0.5)",
+        onComplete: () => {
+          animState[charIdx].current = finalOffset;
+          gsap.set(this.target, { zIndex: "" });
+          draggingEl = null;
+          check_resorted_for_easter_eggs(order.map(i => SOPHIA[i]).join(''));
+        }
+      });
+    }
+  });
+  triggerWelcomeWiggle();
+}
+
+function check_resorted_for_easter_eggs(order) {
+  const easterEggs = {
+    "SOPHIADIGGS-GALLIGAN": "You found the original order!",
+    "NAGILLAG-SGGIDAIHPOS": "Backwards!",
+    "AAADGGGGHIIILLNOPSS": "Alphabetized"
+  };
+  let order_no_dash = order.replace(/-/g, '');
+  
+  if (order === "NAGILLAG-SGGIDAIHPOS") {
+    gsap.to("body", { scaleX: -1, duration: 1, ease: "power2.inOut" });
+  }
+  
+  if (order_no_dash === "AAADGGGGHIIILLNOPSS") {
+    const chars = document.querySelectorAll('.char');
+    
+    // RE-INIT RESTORED: Recalculate layout for alphabetized widths before animating
+    initSignature(); 
+    
+    chars.forEach((char, i) => {
+      const letterColor = `hsl(${(i * 30) % 360}, 80%, 60%)`;
+      const paths = char.querySelectorAll('path');
+      gsap.to(paths, {
+        y: -20, stroke: letterColor, duration: 0.6, ease: "sine.inOut", 
+        repeat: -1, yoyo: true, delay: i * 0.1, 
+        onStart: () => { 
+          paths.forEach(p => { p.style.removeProperty('stroke'); p.style.removeProperty('stroke-width'); }); 
+        }
+      });
+    });
+  }
+}
+
+function triggerWelcomeWiggle() {
+  const characters = document.querySelectorAll('.char');
+  characters.forEach((char, i) => {
+    const tl = gsap.timeline({ delay: i * 0.08 });
+    tl.to(char, { y: -7, duration: 0.2, ease: "sine.out" })
+      .to(char, { y: 3, duration: 0.35, ease: "sine.inOut" })
+      .to(char, { y: 0, duration: 0.4, ease: "back.out(2)" });
+  });
+}
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (document.querySelector('.char.dragging')) return;
+    initSignature();
+  }, 150);
+});
+
+if (document.readyState === "complete") { initSignature(); } 
+else { window.addEventListener("load", initSignature); }
+
 if (typeof swup !== 'undefined') {
   swup.hooks.on('page:view', initSignature);
 }
@@ -577,20 +754,10 @@ if (typeof swup !== 'undefined') {
   <div class="site-wrapper">
 
     <header class="site-header">
-      <!-- <h1 class="site-title"><a href="/">Sophia Diggs-Galligan</a></h1> -->
 
       <h1 class="site-title">
-        <!-- <a href="/"> -->
-          <!-- <img src="{{ '/assets/images/name_letters.svg' | relative_url }}" alt="Sophia Diggs-Galligan"> -->
            {% include name_letters.svg %}
-        <!-- </a> -->
       </h1>
-
-      <!-- <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </button> -->
 
       <a class="menu-toggle" id="hamburger_button" aria-label="Toggle Menu" aria-expanded="false">
         {% include cardboard_buttons/hamburger.svg %}
