@@ -605,12 +605,13 @@ if (typeof swup !== 'undefined') {
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  // Check if the device is a touch/no-hover device
+function initProjectCards() {
   const isTouchDevice = window.matchMedia("(hover: none)").matches;
 
   if (isTouchDevice) {
     const cards = document.querySelectorAll('.project-card');
+    
+    if (cards.length === 0) return;
 
     const observerOptions = {
       root: null,
@@ -627,15 +628,20 @@ if (typeof swup !== 'undefined') {
       });
     }, observerOptions);
 
-    cards.forEach(card => observer.observe(card));
-
-  // add transition delay to each card for staggered effect
-    const allCards = document.querySelectorAll('.project-card');
-    allCards.forEach((card, index) => {
+    cards.forEach((card, index) => {
       card.style.transitionDelay = `${index * 200}ms`;
+      observer.observe(card);
     });
   }
-});
+}
+
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  initProjectCards();
+} else {
+  document.addEventListener("DOMContentLoaded", initProjectCards);
+}
+
+swup.hooks.on('page:view', initProjectCards);
 </script>
 
 </head>
