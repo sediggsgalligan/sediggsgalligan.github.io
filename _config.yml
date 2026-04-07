@@ -14,6 +14,9 @@ collections:
     permalink: /projects/:slug/
     sort_by: priority
     sitemap: true
+  publications:
+    sort_by: date
+    sitemap: true
 
 github: [metadata]
 encoding: UTF-8
