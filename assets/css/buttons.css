@@ -1,6 +1,6 @@
 /* --- 1. The Core Toggle (Swaps the SVG layers) --- */
 /* Hide active layers by default */
-#about_active, #projects_active, #research_active, #contact_active {
+#about_active, #projects_active, #research_active, #contact_active, #hamburger_active {
   display: none;
 }
 
@@ -8,7 +8,8 @@
 .nav-item.active #about_active,
 .nav-item.active #projects_active,
 .nav-item.active #research_active,
-.nav-item.active #contact_active {
+.nav-item.active #contact_active,
+.nav-item.active #hamburger_active {
   display: block;
 }
 
@@ -16,7 +17,8 @@
 .nav-item.active #about_inactive,
 .nav-item.active #projects_inactive,
 .nav-item.active #research_inactive,
-.nav-item.active #contact_inactive {
+.nav-item.active #contact_inactive,
+.nav-item.active #hamburger_inactive {
   display: none;
 }
 
@@ -29,14 +31,15 @@
 }
 
 /* This triggers on ANY nav-item hover, active or not */
-.nav-item:hover .fg {
+.nav-item:hover .fg, .menu-toggle:active.fg {
   transform: translate(-5px, 5px);
 }
 
 .nav-item.pressing #about_active,
 .nav-item.pressing #projects_active,
 .nav-item.pressing #research_active,
-.nav-item.pressing #contact_active {
+.nav-item.pressing #contact_active,
+.nav-item.pressing #hamburger_active {
   display: block;
 }
 
@@ -44,13 +47,30 @@
   transform: translate(-5px, 5px);
 }
 
-/* --- 3. Optional: Smooth "Entry" Animation --- */
-/* This makes the button pop slightly when the page loads/swaps */
 @keyframes buttonLoad {
   0% { transform: translate(-5px, 5px); }
   100% { transform: translate(0px, 0px); }
 }
 
+@keyframes buttonPress {
+  0% { transform: translate(0px, 0px); }
+  10% { transform: translate(-4px, 4px); }
+  90% { transform: translate(-4px, 4px); }
+  100% { transform: translate(0px, 0px); }
+}
+
 .nav-item .fg {
   animation: buttonLoad 0.4s ease-out;
+}
+
+
+.fg {
+  transform: translate(0, 0);
+  transition: transform 0.3s ease;
+}
+
+/* Pressed state */
+.menu-toggle:active .fg {
+  transform: translate(-4px, 4px);
+  transition: transform 0.1s ease; /* Snappy press, slower release */
 }

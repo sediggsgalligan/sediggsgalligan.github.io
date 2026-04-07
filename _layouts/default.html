@@ -18,7 +18,7 @@
 
   <script src="https://unpkg.com/swup@4"></script>
   <script src="https://unpkg.com/@swup/preload-plugin@3"></script>
-  <script>
+  <!-- <script>
   const swup = new Swup({
     plugins: [new SwupPreloadPlugin()]
   });
@@ -86,6 +86,124 @@
 
   // Run once on initial page load
   window.addEventListener('DOMContentLoaded', updateActiveNav);
+</script> -->
+
+<script>
+  const swup = new Swup({
+    plugins: [new SwupPreloadPlugin()]
+  });
+
+  // --- NEW: Hamburger Logic ---
+  function initHamburger() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    
+    if (!menuToggle || !mainNav) return;
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = mainNav.classList.toggle('is-open');
+      menuToggle.classList.toggle('is-active');
+      // Prevent scrolling the background when menu is open
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+  }
+
+  function closeHamburger() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.classList.remove('is-active');
+      mainNav.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function updateActiveNav() {
+    const currentPath = window.location.pathname;
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+      const href = item.getAttribute('href');
+      const isHome = currentPath === '/' || currentPath === '/index.html';
+      const isMatch = (href === '/' && isHome) || (href !== '/' && currentPath.startsWith(href));
+
+      if (isMatch) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  // Hook into Swup's lifecycle
+  swup.hooks.on('visit:start', (visit) => {
+    // NEW: Close menu immediately when a transition starts
+    closeHamburger();
+
+    document.getElementById('page-loader').classList.add('is-loading');
+    const dest = visit.to.url;
+
+    let section = 'about';
+    if (dest === '/' || dest === '/index.html') section = 'about';
+    else if (dest.startsWith('/projects')) section = 'projects';
+    else if (dest.startsWith('/research')) section = 'research';
+    else if (dest.startsWith('/contact')) section = 'contact';
+    document.body.dataset.section = section;
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const href = item.getAttribute('href');
+      const isHome = dest === '/' || dest === '/index.html';
+      const isMatch = (href === '/' && isHome) || (href !== '/' && dest.startsWith(href));
+      item.classList.toggle('pressing', isMatch);
+    });
+  });
+
+  swup.hooks.on('page:view', () => {
+    document.getElementById('page-loader').classList.remove('is-loading');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('pressing'));
+    updateActiveNav();
+
+    const images = document.querySelectorAll('#swup img');
+    images.forEach(img => {
+      const parent = img.parentNode;
+      const newImg = img.cloneNode(true);
+      parent.replaceChild(newImg, img);
+    });
+  });
+
+  // Run on initial page load
+  window.addEventListener('DOMContentLoaded', () => {
+    updateActiveNav();
+    initHamburger(); // Initialize the toggle listener
+  });
+
+  function handleSvgViewbox() {
+  const nameSvg = document.querySelector('.name-svg');
+  if (!nameSvg) return;
+
+  // Create a media query list
+  const mobileQuery = window.matchMedia("(max-width: 768px)");
+
+  function updateViewBox(e) {
+    if (e.matches) {
+      // Mobile ViewBox (Zoomed in)
+      // nameSvg.setAttribute('viewBox', '-150 -30 1000 124');
+      nameSvg.setAttribute('viewBox', '0 -30 800 124');
+    } else {
+      // Desktop ViewBox (Original wide view)
+      nameSvg.setAttribute('viewBox', '-350 -30 1433 124');
+    }
+  }
+
+  // Register the listener to run whenever the breakpoint is crossed
+  mobileQuery.addEventListener('change', updateViewBox);
+
+  // Run once on load to set the correct initial state
+  updateViewBox(mobileQuery);
+}
+
+// Call it on load
+document.addEventListener('DOMContentLoaded', handleSvgViewbox);
 </script>
 
 
@@ -396,6 +514,16 @@ if (typeof swup !== 'undefined') {
            {% include name_letters.svg %}
         <!-- </a> -->
       </h1>
+
+      <!-- <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button> -->
+
+      <a class="menu-toggle" id="hamburger_button" aria-label="Toggle Menu" aria-expanded="false">
+        {% include cardboard_buttons/hamburger.svg %}
+      </a>
 
       <nav class="nav" id="main-nav">
         <a href="/" class="nav-item nav-about{% if page.url == '/' or page.url == '/index.html' %} active{% endif %}"
