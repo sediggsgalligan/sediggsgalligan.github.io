@@ -44,10 +44,17 @@ permalink: /projects
 
 <div class="projects-grid">
   {% assign all_projects = site.projects | where_exp: "item", "item.path contains '_projects'" %}
-  {% assign sorted_projects = all_projects | sort: "relative_path" %}
+  
+  {% comment %} Split projects into two groups {% endcomment %}
+  {% assign with_priority = all_projects | where_exp: "item", "item.priority" | sort: "priority" %}
+  {% assign no_priority = all_projects | where_exp: "item", "item.priority == nil" | sort: "relative_path" %}
+  
+  {% comment %} Combine them: Priority first, then the rest {% endcomment %}
+  {% assign sorted_projects = with_priority | concat: no_priority %}
+
   {% for project in sorted_projects %}
     {% unless project.hidden %}
-      <div class="project-card">
+      <a class="project-card" href="{{ project.url | relative_url }}">
         <div class="project-card-img-container">
           <img
             class="project-card-img img-default {{ project.css_class }}"
@@ -67,7 +74,7 @@ permalink: /projects
         <div class="project-card-body">
           <h2 class="project-title">{{ project.title }}</h2>
         </div>
-      </div>
+      </a>
     {% endunless %}
   {% endfor %}
 </div>

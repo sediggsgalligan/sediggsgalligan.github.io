@@ -10,17 +10,27 @@ url: "https://sophiadg.com"
 
 collections:
   projects:
+    output: true 
+    permalink: /projects/:slug/
     sort_by: priority
     sitemap: true
 
 github: [metadata]
 encoding: UTF-8
 kramdown:
- input: GFM
- hard_wrap: false
- mathjax: false
+  input: GFM
+  hard_wrap: false
+  mathjax: false
 future: true
 jailed: false
 gfm_quirks: paragraph_end
 
 markdown: kramdown
+
+defaults:
+  - scope:
+      path: ""          # An empty string here means "all files"
+      type: "projects"  # This matches your collection name
+    values:
+      layout: "project" # The name of your new layout file (project.html)
+
