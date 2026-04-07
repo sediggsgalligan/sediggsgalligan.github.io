@@ -1,0 +1,21 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Environment and Build
+        # Inject secrets into the build environment
+        env:
+          EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
+          EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }} 
+          EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }} 
+        run: |
+          # If your build process looks for a .env file, you can create it here:
+          echo "REACT_APP_API_KEY=${{ secrets.MY_API_KEY }}" > .env
+          npm install
+          npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
