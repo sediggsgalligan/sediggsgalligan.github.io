@@ -83,7 +83,7 @@ permalink: /contact
     <script>
         const _getK = () => {
             const encoded = "{{ site.env.EMAILJS_PUBLIC_KEY | base64_encode }}";
-            return atob(encoded); 
+            return encoded; 
         };
         
         const canvas = document.getElementById('drawingCanvas');
