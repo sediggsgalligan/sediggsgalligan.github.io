@@ -577,8 +577,8 @@ h2.project-title {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 5rem;
-  height: 5rem;
+  width: 4rem;
+  height: 4rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -600,7 +600,7 @@ h2.project-title {
     z-index: 2001; /* Higher than the nav overlay (2000) */
     pointer-events: none; /* Allows clicks to pass through to the home link if needed */
 
-    top: 0.6rem;
+    top: 0rem;
     left: -4.75rem;
     padding: 0;
     margin: 0;
@@ -618,7 +618,7 @@ h2.project-title {
     display: flex;
     position: absolute;
     top: 0.5rem;
-    right: -0.75rem;
+    right: -1.25rem;
   }
 
   .nav {
@@ -654,7 +654,7 @@ h2.project-title {
 
 @media (max-width: 400px) {
   .menu-toggle {
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
   }
 }

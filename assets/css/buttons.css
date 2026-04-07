@@ -8,8 +8,7 @@
 .nav-item.active #about_active,
 .nav-item.active #projects_active,
 .nav-item.active #research_active,
-.nav-item.active #contact_active,
-.nav-item.active #hamburger_active {
+.nav-item.active #contact_active {
   display: block;
 }
 
@@ -17,9 +16,31 @@
 .nav-item.active #about_inactive,
 .nav-item.active #projects_inactive,
 .nav-item.active #research_inactive,
-.nav-item.active #contact_inactive,
-.nav-item.active #hamburger_inactive {
+.nav-item.active #contact_inactive {
   display: none;
+}
+
+.menu-toggle .line {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  /* Ensures rotation happens around the center of the path itself */
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: translate(0, 0) rotate(0deg);
+  opacity: 1;
+}
+
+.menu-toggle.active .top {
+  /* Move down 9px and slightly left (-1px) to center the 'X' legs */
+  transform: translateY(9px) translateX(-1px) rotate(45deg);
+}
+
+.menu-toggle.active .middle {
+  opacity: 0;
+}
+
+.menu-toggle.active .bottom {
+  /* Move up 9px and slightly left (-1px) to align with the top bar */
+  transform: translateY(-9px) translateX(-1px) rotate(-45deg);
 }
 
 /* --- 2. The Hover Animation (Universal) --- */

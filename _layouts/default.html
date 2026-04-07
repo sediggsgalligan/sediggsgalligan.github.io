@@ -102,7 +102,7 @@
 
     menuToggle.addEventListener('click', () => {
       const isOpen = mainNav.classList.toggle('is-open');
-      menuToggle.classList.toggle('is-active');
+      menuToggle.classList.toggle('active');
       // Prevent scrolling the background when menu is open
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
@@ -112,7 +112,7 @@
     const menuToggle = document.querySelector('.menu-toggle');
     const mainNav = document.getElementById('main-nav');
     if (menuToggle && mainNav) {
-      menuToggle.classList.remove('is-active');
+      menuToggle.classList.remove('active');
       mainNav.classList.remove('is-open');
       document.body.style.overflow = '';
     }
@@ -183,23 +183,33 @@
 
   // Create a media query list
   const mobileQuery = window.matchMedia("(max-width: 768px)");
+  const smallerMobileQuery = window.matchMedia("(max-width: 420px)");
 
   function updateViewBox(e) {
     if (e.matches) {
-      // Mobile ViewBox (Zoomed in)
       // nameSvg.setAttribute('viewBox', '-150 -30 1000 124');
-      nameSvg.setAttribute('viewBox', '0 -30 800 124');
+      // nameSvg.setAttribute('viewBox', '0 -30 800 124');
+      nameSvg.setAttribute('viewBox', '0 -30 700 124');
     } else {
-      // Desktop ViewBox (Original wide view)
       nameSvg.setAttribute('viewBox', '-350 -30 1433 124');
+    }
+  }
+
+  function updateSmallerViewBox(e) {
+    if (e.matches) {
+      // nameSvg.setAttribute('viewBox', '-150 -30 1000 124');
+      // nameSvg.setAttribute('viewBox', '0 -30 800 124');
+      nameSvg.setAttribute('viewBox', '0 -30 650 124');
     }
   }
 
   // Register the listener to run whenever the breakpoint is crossed
   mobileQuery.addEventListener('change', updateViewBox);
+  smallerMobileQuery.addEventListener('change', updateSmallerViewBox);
 
   // Run once on load to set the correct initial state
   updateViewBox(mobileQuery);
+  updateSmallerViewBox(smallerMobileQuery);
 }
 
 // Call it on load
