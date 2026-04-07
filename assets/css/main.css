@@ -578,6 +578,36 @@ h2.project-title {
   transform: scale(0.98) translateY(1%) translateX(1%);
 }
 
+/* Snapping */
+@media (max-width: 768px) {
+  .projects-grid {
+    /* 1. Enable snapping on the parent container */
+    scroll-snap-type: y mandatory;
+    
+    /* 2. Ensure the container is scrollable */
+    overflow-y: scroll;
+    height: 100vh; /* Adjust height based on your layout */
+    
+    /* Optional: hide scrollbar for a cleaner look */
+    scrollbar-width: none; 
+  }
+
+  .projects-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-card {
+    /* 3. Define where the card snaps to the viewport */
+    scroll-snap-align: center;
+    
+    /* Ensure cards are large enough to feel like "pages" */
+    min-height: 80vh;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
 
 /* Mobile menu */
 /* --- Desktop Default (Hides Hamburger) --- */
