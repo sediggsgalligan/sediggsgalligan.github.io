@@ -17,30 +17,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 1. Inject Secrets (Your original logic)
-      - name: Inject Secrets
+      - name: Inject Secrets into Jekyll Config
         run: |
-          echo "REACT_APP_API_KEY=${{ secrets.MY_API_KEY }}" > .env
-          # Note: If Jekyll needs these as environment variables during build, 
-          # you can also export them here.
+          echo "env:" >> _config.yml
+          echo "  EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}" >> _config.yml
+          echo "  EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}" >> _config.yml
+          echo "  EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}" >> _config.yml
 
-      # 2. Setup Node and Minifiers
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Updated for 2026 standards
+          node-version: '20'
       
       - name: Install Minifiers
         run: |
           npm install -g terser csso-cli html-minifier
 
-      # 3. Perform Minification
       - name: Minify Assets
         run: |
           find . -name "*.js" -exec terser {} --compress --mangle -o {} \;
           find . -name "*.css" -exec csso {} -o {} \;
 
-      # 4. Push to gh-pages branch
       - name: Push to gh-pages
         run: |
           git config user.name "github-actions[bot]"
