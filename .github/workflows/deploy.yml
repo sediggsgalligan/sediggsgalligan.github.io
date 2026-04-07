@@ -2,6 +2,7 @@ name: build-minify-deploy
 run-name: Build and Minify to gh-pages
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
