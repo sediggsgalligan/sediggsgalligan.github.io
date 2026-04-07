@@ -235,7 +235,7 @@ img {
    ============================================= */
 .plain-page {
   margin-top: 1rem;
-  max-width: 680px;
+  max-width: 800px;
 }
 
 .plain-page h2 {
@@ -665,4 +665,29 @@ h2.project-title {
     width: 3rem;
     height: 3rem;
   }
+}
+
+
+/* Publications */
+div.publication {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+div.publication .author_list {
+  color: #003b0a; 
+  font-size: 0.8rem; 
+  font-style: italic; 
+  text-align: left;
+}
+
+div.publication a {
+  font-size: 0.9rem; 
+  border: #1e792d solid 2px; 
+  color: #1e792d;
+  border-radius: 5px; 
+  padding: 0.4rem; 
+  text-decoration: none;
+  margin-left: 0.2em;
+  font-weight: bold;
 }

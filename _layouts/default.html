@@ -634,18 +634,14 @@ function initSignature() {
 }
 
 function check_resorted_for_easter_eggs(order) {
-  const easterEggs = {
-    "SOPHIADIGGS-GALLIGAN": "You found the original order!",
-    "NAGILLAG-SGGIDAIHPOS": "Backwards!",
-    "AAADGGGGHIIILLNOPSS": "Alphabetized"
-  };
+  
   let order_no_dash = order.replace(/-/g, '');
   
   if (order === "NAGILLAG-SGGIDAIHPOS") {
     gsap.to("body", { scaleX: -1, duration: 1, ease: "power2.inOut" });
   }
   
-  if (order_no_dash === "AAADGGGGHIIILLNOPSS") {
+  if (order_no_dash === "AAADGGGGHIIILLNOPSS" || order_no_dash === "SSPONLLIIIHGGGGDAAA") {
     const chars = document.querySelectorAll('.char');
     
     // RE-INIT RESTORED: Recalculate layout for alphabetized widths before animating
