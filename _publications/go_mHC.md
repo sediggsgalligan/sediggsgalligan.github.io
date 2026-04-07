@@ -1,14 +1,14 @@
 ---
 layout: publication
 
-title: "go-HC: Direct Parameterization of Manifold-Constrained Hyper-Connections via Generalized Orthostochastic Matrices"
+title: "go-mHC: Direct Parameterization of Manifold-Constrained Hyper-Connections via Generalized Orthostochastic Matrices"
 date: "2026-04-02"
 
-authors: ["T Dandachi", "S Diggs-Galligan"]
+authors: ["T. Dandachi", "S. Diggs-Galligan"]
 
 type: "paper"
 
-abstract: "We introduce go-HC, a method for the direct parameterization of manifold-constrained hyper-connections. By utilizing generalized orthostochastic matrices, we provide a framework for maintaining constraints in complex neural architectures."
+abstract: "We introduce go-mHC, a method for the direct parameterization of manifold-constrained hyper-connections. By utilizing generalized orthostochastic matrices, we provide a framework for maintaining constraints in complex neural architectures."
 
 link_name: "arXiv"
 link: "https://arxiv.org/abs/2604.02309"
