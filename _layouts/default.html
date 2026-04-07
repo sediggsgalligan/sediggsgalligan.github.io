@@ -27,75 +27,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/favicon/apple-touch-icon.png' | relative_url }}">
 
   <link rel="manifest" href="{{ '/assets/favicon/site.webmanifest' | relative_url }}">
-  <!-- <script>
-  const swup = new Swup({
-    plugins: [new SwupPreloadPlugin()]
-  });
-
-  function updateActiveNav() {
-    const currentPath = window.location.pathname;
-    console.log("Swup changed page to:", currentPath); // Check your console!
-
-    const navItems = document.querySelectorAll('.nav-item');
-
-    navItems.forEach(item => {
-      // Get the link destination (e.g., "/projects")
-      const href = item.getAttribute('href');
-      
-      // Logic: If home, match exactly. If other, check if path starts with href.
-      const isHome = currentPath === '/' || currentPath === '/index.html';
-      const isMatch = (href === '/' && isHome) || (href !== '/' && currentPath.startsWith(href));
-
-      if (isMatch) {
-        item.classList.add('active');
-        console.log("Activated:", href);
-      } else {
-        item.classList.remove('active');
-      }
-    });
-  }
-
-  // Hook into Swup's lifecycle
-  swup.hooks.on('visit:start', (visit) => {
-    document.getElementById('page-loader').classList.add('is-loading');
-
-    // Hold the clicked button in its pressed state while loading
-    const dest = visit.to.url;
-
-    // Update body section for spinner color
-    let section = 'about';
-    if (dest === '/' || dest === '/index.html') section = 'about';
-    else if (dest.startsWith('/projects')) section = 'projects';
-    else if (dest.startsWith('/research')) section = 'research';
-    else if (dest.startsWith('/contact')) section = 'contact';
-    document.body.dataset.section = section;
-
-    document.querySelectorAll('.nav-item').forEach(item => {
-      const href = item.getAttribute('href');
-      const isHome = dest === '/' || dest === '/index.html';
-      const isMatch = (href === '/' && isHome) || (href !== '/' && dest.startsWith(href));
-      item.classList.toggle('pressing', isMatch);
-    });
-  });
-
-  swup.hooks.on('page:view', () => {
-    document.getElementById('page-loader').classList.remove('is-loading');
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('pressing'));
-    updateActiveNav();
-
-  const images = document.querySelectorAll('#swup img');
-    images.forEach(img => {
-      // Clone the image and replace the old one to force a re-render
-      const parent = img.parentNode;
-      const newImg = img.cloneNode(true);
-      parent.replaceChild(newImg, img);
-    });
-    
-  });
-
-  // Run once on initial page load
-  window.addEventListener('DOMContentLoaded', updateActiveNav);
-</script> -->
 
 <script>
   const swup = new Swup({
@@ -196,8 +127,6 @@
 
   function updateViewBox(e) {
     if (e.matches) {
-      // nameSvg.setAttribute('viewBox', '-150 -30 1000 124');
-      // nameSvg.setAttribute('viewBox', '0 -30 800 124');
       nameSvg.setAttribute('viewBox', '0 -30 700 124');
     } else {
       nameSvg.setAttribute('viewBox', '-350 -30 1433 124');
@@ -245,285 +174,10 @@ document.addEventListener('DOMContentLoaded', handleSvgViewbox);
 }
 </style>
 
-
-<!-- <script>
-
-gsap.registerPlugin(Draggable);
-
-let draggableInstances = [];
-
-function measureOrigins() {
-  const svg = document.querySelector('.site-title svg');
-  const characters = Array.from(document.querySelectorAll('.char'));
-  if (!svg || characters.length === 0) return null;
-
-  const svgRect = svg.getBoundingClientRect();
-  return {
-    svg,
-    characters,
-    origins: characters.map(el => {
-      const r = el.getBoundingClientRect();
-      return {
-        cx: (r.left + r.width / 2) - svgRect.left,
-        width: r.width
-      };
-    })
-  };
-}
-
-const SOPHIA = "SOPHIADIGGS-GALLIGAN";
-
-function initSignature() {
-  draggableInstances.forEach(d => d.kill());
-  draggableInstances = [];
-
-  const chars = document.querySelectorAll('.char');
-  chars.forEach(char => {
-    // Create an invisible rectangle that matches the letter's size
-    const bbox = char.getBBox();
-    const hitBox = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-
-    // Check if there is a hitbox already (in case of re-init) and skip if so
-    if (char.querySelector('rect')) return;
-    
-    hitBox.setAttribute("x", bbox.x);
-    hitBox.setAttribute("y", bbox.y);
-    hitBox.setAttribute("width", bbox.width);
-    hitBox.setAttribute("height", bbox.height);
-    hitBox.setAttribute("fill", "transparent"); // Invisible but clickable
-    hitBox.style.pointerEvents = "all";
-    
-    // Put it at the beginning of the character group
-    char.insertBefore(hitBox, char.firstChild);
-  });
-
-  const svg = document.querySelector('.site-title svg');
-  const characters = Array.from(document.querySelectorAll('.char'));
-  if (!svg || characters.length === 0) return;
-
-  // 1. Reset all transforms so getBoundingClientRect reflects true painted positions
-  characters.forEach(el => gsap.set(el, { x: 0, y: 0 }));
-
-  // 2. Measure origins from the now-clean positions
-  const svgRect = svg.getBoundingClientRect();
-  const origins = characters.map(el => {
-    const r = el.getBoundingClientRect();
-    return {
-      cx: (r.left + r.width / 2) - svgRect.left,
-      width: r.width
-    };
-  });
-
-  let order = characters.map((_, i) => i);
-  let draggingEl = null;
-  let dragSlot = null;
-
-  // 3. Anim state starts at 0 (transforms were just cleared)
-  const anim = characters.map(() => ({ current: 0, target: 0 }));
-
-  // 4. Immediately snap each char to its correct slot offset for the current order
-  //    (no animation — just correct the positions instantly on resize)
-  order.forEach((charIdx, slotIdx) => {
-    const targetOffset = origins[slotIdx].cx - origins[charIdx].cx;
-    anim[charIdx].current = targetOffset;
-    anim[charIdx].target = targetOffset;
-    gsap.set(characters[charIdx], { x: targetOffset });
-  });
-
-  let rafId;
-  function startLoop() {
-    cancelAnimationFrame(rafId);
-    function loop() {
-      order.forEach((charIdx, slotIdx) => {
-        if (characters[charIdx] === draggingEl) return;
-        const a = anim[charIdx];
-        a.target = origins[slotIdx].cx - origins[charIdx].cx;
-        const diff = a.target - a.current;
-        if (Math.abs(diff) > 0.1) {
-          a.current += diff * 0.18;
-          gsap.set(characters[charIdx], { x: a.current });
-        }
-      });
-      rafId = requestAnimationFrame(loop);
-    }
-    rafId = requestAnimationFrame(loop);
-  }
-  startLoop();
-
-  const instances = Draggable.create(characters, {
-    type: 'x,y',
-    dragClickables: true,
-    zIndexBoost: true,
-
-    onDragStart: function() {
-      draggingEl = this.target;
-      const charIdx = characters.indexOf(this.target);
-      dragSlot = order.indexOf(charIdx);
-      gsap.set(this.target, { zIndex: 100 });
-    },
-
-    onDrag: function() {
-      const charIdx = characters.indexOf(this.target);
-      const svgRectNow = svg.getBoundingClientRect();
-      const elRect = this.target.getBoundingClientRect();
-      const elCenterX = (elRect.left + elRect.width / 2) - svgRectNow.left;
-
-      let nearest = 0, nearestDist = Infinity;
-      order.forEach((_, slotIdx) => {
-        const d = Math.abs(origins[slotIdx].cx - elCenterX);
-        if (d < nearestDist) { nearestDist = d; nearest = slotIdx; }
-      });
-
-      if (nearest !== dragSlot) {
-        const newOrder = [...order];
-        const fromIdx = newOrder.indexOf(charIdx);
-        newOrder.splice(fromIdx, 1);
-        newOrder.splice(nearest, 0, charIdx);
-        order = newOrder;
-        dragSlot = nearest;
-      }
-    },
-
-    onDragEnd: function() {
-      const charIdx = characters.indexOf(this.target);
-      const targetOffsetX = origins[dragSlot].cx - origins[charIdx].cx;
-      const currentX = gsap.getProperty(this.target, 'x');
-      const currentY = gsap.getProperty(this.target, 'y');
-
-      gsap.fromTo(this.target,
-        { x: currentX, y: currentY },
-        {
-          x: targetOffsetX,
-          y: 0,
-          duration: 0.7,
-          ease: 'elastic.out(1, 0.4)',
-          onUpdate: () => {
-            anim[charIdx].current = gsap.getProperty(this.target, 'x');
-          },
-          onComplete: () => {
-            anim[charIdx].current = targetOffsetX;
-            anim[charIdx].target = targetOffsetX;
-            gsap.set(this.target, { zIndex: '' });
-            draggingEl = null;
-
-            
-            check_resorted_for_easter_eggs(order.map(i => SOPHIA[i]).join(''));
-          }
-        }
-      );
-    }
-  });
-
-  draggableInstances = instances;
-  triggerWelcomeWiggle();
-}
-
-function check_resorted_for_easter_eggs(order) {
-  const easterEggs = {
-    "SOPHIADIGGS-GALLIGAN": "You found the original order! Hello again, Sophia.",
-    "NAGILLAG-SGGIDAIHPOS": "Backwards! A mirror universe Sophia sends her regards.",
-    "AAADGGGGHIIILLNOPSS": "Alphabetized"
-  };
-
-  order_no_dash = order.replace(/-/g, '');
-  // console.log(easterEggs[order] || easterEggs[order_no_dash] || `Current order: ${order}`);
-
-  if (order === "NAGILLAG-SGGIDAIHPOS") {
-    // Apply a horizontal flip to the entire page
-    gsap.to("body", {
-      scaleX: -1,
-      duration: 1,
-      ease: "power2.inOut"
-    });
-
-  }
-  
-  if (order_no_dash === "AAADGGGGHIIILLNOPSS") {
-    const chars = document.querySelectorAll('.char');
-    initSignature();
-      chars.forEach((char, i) => {
-          // One color per character
-          const letterColor = `hsl(${(i * 30) % 360}, 80%, 60%)`; // (i * 30) creates a rainbow gradient across the word
-          const paths = char.querySelectorAll('path');
-
-          // Animate the paths as a unit
-          gsap.to(paths, {
-              // Wave movement: move up and down
-              y: -20, 
-              
-              // Apply the shared color
-              stroke: letterColor,
-              
-              duration: 0.6,
-              ease: "sine.inOut",
-              repeat: -1, // Infinite wave
-              yoyo: true,
-              
-              // The magic: stagger the start time based on the character's index
-              delay: i * 0.1, 
-              
-              onStart: () => {
-                  paths.forEach(p => {
-                      // Force clear inline styles so GSAP takes over
-                      p.style.removeProperty('stroke');
-                      p.style.removeProperty('stroke-width');
-                  });
-              }
-          });
-      });
-  }
-}
-
-function triggerWelcomeWiggle() {
-  const characters = document.querySelectorAll('.char');
-  
-  characters.forEach((char, i) => {
-    // Create a unique timeline for THIS character
-    const tl = gsap.timeline({
-      delay: i * 0.08 // This is the "magic" delay that creates the wave flow
-    });
-
-    tl.to(char, {
-      y: -7,           // 1. Pop UP
-      duration: 0.2,
-      ease: "sine.out"
-    })
-    .to(char, {
-      y: 3,            // 2. Plunge DOWN
-      duration: 0.35,
-      ease: "sine.inOut"
-    })
-    .to(char, {
-      y: 0,             // 3. Snap back to CENTER
-      duration: 0.4,
-      ease: "back.out(2)" 
-    });
-  });
-}
-
-// Debounced resize handler
-let resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    // Don't re-init mid-drag
-    if (document.querySelector('.char.dragging')) return;
-    initSignature();
-  }, 150);
-});
-
-// Jekyll/Swup compatibility: Run after everything is settled
-if (document.readyState === "complete") {
-  initSignature();
-} else {
-  window.addEventListener("load", initSignature);
-}
-
-// If using Swup, we must re-init after every page transition
-if (typeof swup !== 'undefined') {
-  swup.hooks.on('page:view', initSignature);
-}
-</script> -->
+<style>
+  /* Prevents the "flash" of original positions during Swup transitions */
+  .char { opacity: 0; }
+</style>
 
 <script>
 gsap.registerPlugin(Draggable);
@@ -531,6 +185,12 @@ gsap.registerPlugin(Draggable);
 let draggableInstances = [];
 const SOPHIA = "SOPHIADIGGS-GALLIGAN";
 
+// --- PERSISTENCE STATE ---
+let currentOrder = null; 
+let lastInteractionTime = Date.now();
+let hasInteracted = false;
+let idleCheckInterval;
+
 function initSignature() {
   draggableInstances.forEach(d => d.kill());
   draggableInstances = [];
@@ -538,6 +198,11 @@ function initSignature() {
   const svg = document.querySelector('.site-title svg');
   const characters = Array.from(document.querySelectorAll('.char'));
   if (!svg || characters.length === 0) return;
+
+  // Initialize order if it's the first run
+  if (!currentOrder) {
+    currentOrder = characters.map((_, i) => i);
+  }
 
   // 1. Measure natural design
   gsap.set(characters, { x: 0, y: 0 });
@@ -561,7 +226,6 @@ function initSignature() {
       el: el,
       width: box.width,
       naturalX: box.x,
-      // Capture original spacing between letters
       nextGap: (i < characters.length - 1) 
         ? (characters[i+1].getBBox().x - (box.x + box.width)) 
         : 0
@@ -569,27 +233,33 @@ function initSignature() {
   });
 
   const originX = charData[0].naturalX;
-  let order = characters.map((_, i) => i);
   let draggingEl = null;
-  const animState = characters.map(() => ({ current: 0 }));
+  const animState = characters.map((_, i) => {
+    // PRE-CALCULATE initial positions to avoid the jump
+    const slots = getDynamicPositions(currentOrder);
+    const charIdxInOrder = currentOrder.indexOf(i);
+    return { current: slots[charIdxInOrder] - charData[i].naturalX };
+  });
 
-  function getDynamicPositions(currentOrder) {
+  function getDynamicPositions(orderArr) {
     let cursor = originX;
-    return currentOrder.map((charIdx, i) => {
+    return orderArr.map((charIdx, i) => {
       const xPos = cursor;
+      const charWidth = charData[charIdx].width;
       const gap = charData[i] ? charData[i].nextGap : 0;
-      cursor += charData[charIdx].width + gap;
+      cursor += charWidth + gap;
       return xPos;
     });
   }
 
   // 2. Animation Loop
   function updatePositions() {
-    const slotXPositions = getDynamicPositions(order);
-    order.forEach((charIdx, slotIdx) => {
+    const slotXPositions = getDynamicPositions(currentOrder);
+    currentOrder.forEach((charIdx, slotIdx) => {
       if (characters[charIdx] === draggingEl) return;
       const char = charData[charIdx];
       const targetOffset = slotXPositions[slotIdx] - char.naturalX;
+      
       const diff = targetOffset - animState[charIdx].current;
       if (Math.abs(diff) > 0.01) {
         animState[charIdx].current += diff * 0.18;
@@ -600,71 +270,107 @@ function initSignature() {
   }
   requestAnimationFrame(updatePositions);
 
+  // Set initial positions immediately before revealing to prevent flash
+  currentOrder.forEach((charIdx, slotIdx) => {
+    const slots = getDynamicPositions(currentOrder);
+    gsap.set(characters[charIdx], { 
+      x: slots[slotIdx] - charData[charIdx].naturalX,
+      opacity: 1 // Reveal now that they are in the right place
+    });
+  });
+
   // 3. Draggable
   draggableInstances = Draggable.create(characters, {
     type: "x,y",
     onDragStart: function() {
       draggingEl = this.target;
       gsap.set(this.target, { zIndex: 100 });
+      resetIdleTimer();
     },
     onDrag: function() {
       const charIdx = characters.indexOf(this.target);
       const currentVisualX = charData[charIdx].naturalX + gsap.getProperty(this.target, "x");
-      const slots = getDynamicPositions(order);
+      const slots = getDynamicPositions(currentOrder);
+      
       let nearestSlot = 0;
       let minDistance = Infinity;
       slots.forEach((slotX, i) => {
         const dist = Math.abs(slotX - currentVisualX);
         if (dist < minDistance) { minDistance = dist; nearestSlot = i; }
       });
-      const currentSlot = order.indexOf(charIdx);
+
+      const currentSlot = currentOrder.indexOf(charIdx);
       if (nearestSlot !== currentSlot) {
-        order.splice(currentSlot, 1);
-        order.splice(nearestSlot, 0, charIdx);
+        currentOrder.splice(currentSlot, 1);
+        currentOrder.splice(nearestSlot, 0, charIdx);
       }
     },
     onDragEnd: function() {
       const charIdx = characters.indexOf(this.target);
-      const slots = getDynamicPositions(order);
-      const slotIdx = order.indexOf(charIdx);
+      const slots = getDynamicPositions(currentOrder);
+      const slotIdx = currentOrder.indexOf(charIdx);
       const finalOffset = slots[slotIdx] - charData[charIdx].naturalX;
+      
       gsap.to(this.target, {
         x: finalOffset, y: 0, duration: 0.6, ease: "elastic.out(1, 0.5)",
         onComplete: () => {
           animState[charIdx].current = finalOffset;
           gsap.set(this.target, { zIndex: "" });
           draggingEl = null;
-          check_resorted_for_easter_eggs(order.map(i => SOPHIA[i]).join(''));
+          check_resorted_for_easter_eggs(currentOrder.map(i => SOPHIA[i]).join(''));
         }
       });
     }
   });
+
+  startIdleDetection();
   triggerWelcomeWiggle();
 }
 
-function check_resorted_for_easter_eggs(order) {
-  
-  let order_no_dash = order.replace(/-/g, '');
-  
-  if (order === "NAGILLAG-SGGIDAIHPOS") {
+// --- IDLE ANIMATION LOGIC ---
+function resetIdleTimer() {
+  lastInteractionTime = Date.now();
+  hasInteracted = true;
+}
+
+function triggerAttentionJump() {
+  const characters = document.querySelectorAll('.char');
+  if (characters.length === 0) return;
+  const randomIdx = Math.floor(Math.random() * characters.length);
+  const char = characters[randomIdx];
+  gsap.timeline()
+    .to(char, { y: -30, duration: 0.25, ease: "power2.out" })
+    .to(char, { y: 0, duration: 0.45, ease: "bounce.out" });
+}
+
+function startIdleDetection() {
+  if (idleCheckInterval) clearInterval(idleCheckInterval);
+  idleCheckInterval = setInterval(() => {
+    const now = Date.now();
+    const idleTime = now - lastInteractionTime;
+    const threshold = hasInteracted ? 60000 : 30000;
+    if (idleTime >= threshold) {
+      triggerAttentionJump();
+      lastInteractionTime = now - (threshold - 5000);
+    }
+  }, 1000);
+}
+
+// --- UTILITIES & EASTER EGGS ---
+function check_resorted_for_easter_eggs(orderStr) {
+  let order_no_dash = orderStr.replace(/-/g, '');
+  if (orderStr === "NAGILLAG-SGGIDAIHPOS") {
     gsap.to("body", { scaleX: -1, duration: 1, ease: "power2.inOut" });
   }
-  
   if (order_no_dash === "AAADGGGGHIIILLNOPSS" || order_no_dash === "SSPONLLIIIHGGGGDAAA") {
     const chars = document.querySelectorAll('.char');
-    
-    // RE-INIT RESTORED: Recalculate layout for alphabetized widths before animating
-    initSignature(); 
-    
+    resetSignaturePositions(); 
     chars.forEach((char, i) => {
       const letterColor = `hsl(${(i * 30) % 360}, 80%, 60%)`;
       const paths = char.querySelectorAll('path');
       gsap.to(paths, {
         y: -20, stroke: letterColor, duration: 0.6, ease: "sine.inOut", 
-        repeat: -1, yoyo: true, delay: i * 0.1, 
-        onStart: () => { 
-          paths.forEach(p => { p.style.removeProperty('stroke'); p.style.removeProperty('stroke-width'); }); 
-        }
+        repeat: -1, yoyo: true, delay: i * 0.1
       });
     });
   }
@@ -672,7 +378,18 @@ function check_resorted_for_easter_eggs(order) {
 
 function triggerWelcomeWiggle() {
   const characters = document.querySelectorAll('.char');
-  characters.forEach((char, i) => {
+  const charArray = Array.from(characters);
+
+  // Sort based on where the character's index exists within currentOrder
+  const ordered_chars = charArray.sort((a, b) => {
+    const idA = charArray.indexOf(a);
+    const idB = charArray.indexOf(b);
+    
+    // Find which "slot" these IDs currently occupy
+    return currentOrder.indexOf(idA) - currentOrder.indexOf(idB);
+  });
+
+  ordered_chars.forEach((char, i) => {
     const tl = gsap.timeline({ delay: i * 0.08 });
     tl.to(char, { y: -7, duration: 0.2, ease: "sine.out" })
       .to(char, { y: 3, duration: 0.35, ease: "sine.inOut" })
@@ -680,13 +397,35 @@ function triggerWelcomeWiggle() {
   });
 }
 
+function resetSignaturePositions() {
+  const characters = document.querySelectorAll('.char');
+  if (!characters.length) return;
+
+  currentOrder = Array.from(characters).map((_, i) => i);
+
+  lastInteractionTime = Date.now();
+  hasInteracted = false;
+
+  gsap.to(characters, {
+    x: 0,
+    y: 0,
+    duration: 0.8,
+    ease: "elastic.out(1, 0.75)",
+    stagger: 0.02,
+    onComplete: () => {
+      characters.forEach((_, i) => {
+        if (typeof animState !== 'undefined' && animState[i]) {
+          animState[i].current = 0;
+        }
+      });
+    }
+  });
+}
+
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (document.querySelector('.char.dragging')) return;
-    initSignature();
-  }, 150);
+  resizeTimer = setTimeout(initSignature, 150);
 });
 
 if (document.readyState === "complete") { initSignature(); } 
