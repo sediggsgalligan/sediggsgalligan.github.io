@@ -142,7 +142,6 @@ function initSignature() {
   });
 
   startIdleDetection();
-  triggerWelcomeWiggle();
 }
 
 // --- IDLE ANIMATION LOGIC ---
@@ -248,6 +247,8 @@ window.addEventListener('resize', () => {
 
 if (document.readyState === "complete") { initSignature(); } 
 else { window.addEventListener("load", initSignature); }
+
+window.addEventListener('load', triggerWelcomeWiggle);
 
 if (typeof swup !== 'undefined') {
   swup.hooks.on('page:view', initSignature);

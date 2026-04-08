@@ -2,6 +2,8 @@
 layout: default
 ---
 
+<nav id="scroll-indicator"></nav>
+
 <article class="project-container {{ page.css_class }}">
   <header class="project-header">
     <h1 class="project-title">{{ page.title }}</h1>
@@ -23,7 +25,61 @@ layout: default
       {% endif %}
       
       <div class="post-body">
-        {{ content }}
+        <!-- Example HTML Ipsum -->
+        <h1>Lorem Ipsum Header</h1>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+        <ul>
+            <li>List item 1</li>
+            <li>List item 2</li>
+        </ul>
+        <blockquote>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </blockquote><br/><br/><br/><br/><br/><br/>
+
+        {{ content }}<br/><br/><br/><br/><br/><br/>
+
+            <!-- Example HTML Ipsum -->
+<h1>Lorem Ipsum Header</h1>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+<ul>
+    <li>List item 1</li>
+    <li>List item 2</li>
+</ul>
+<blockquote>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</blockquote>
+<br/>
+<br/><br/>
+<br/><br/>
+<br/>
+<!-- Example HTML Ipsum -->
+<h1>Lorem Ipsum Header</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<ul>
+    <li>List item 1</li>
+    <li>List item 2</li>
+</ul>
+<br/>
+<br/><br/>
+<br/><br/>
+<br/>
+<blockquote>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</blockquote>
+<br/>
+<br/><br/>
+<br/><br/>
+<br/>
+<!-- Example HTML Ipsum -->
+<h1>Lorem Ipsum Header</h1>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
+<ul>
+    <li>List item 1</li>
+    <li>List item 2</li>
+</ul>
+<blockquote>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
       </div>
     </div>
   </div>
@@ -51,4 +107,171 @@ layout: default
 
   /* Using your css_class for specific overrides */
   .luminaria { /* Example: background: #fffcf0; */ }
+
+
+  #scroll-indicator {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 100;
+    }
+
+    .dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.2); /* Dimmed state */
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    pointer-events: auto;
+    border: 2px solid transparent;
+    }
+
+    /* The "Lit" State */
+    .dot.active {
+    background-color: var(--c-section); /* Use a bright "light" color */
+    transform: scale(1.5);
+    box-shadow: 0 0 12px var(--c-section), 0 0 20px rgba(255, 204, 0, 0.4);
+    border-color: #fff;
+    }
 </style>
+
+
+<script>
+// 1. Wrap the logic in a reusable function
+function initScrollIndicator() {
+  const container = document.getElementById('scroll-indicator');
+  if (!container) return; // Exit if not on a project page
+
+  // Clear any existing dots (crucial for Swup)
+  container.innerHTML = '';
+
+  const headers = document.querySelectorAll('.project-title, .post-body h1, .post-body h2, .post-body h3');
+  const dots = [];
+
+  const idCounts = {}; // Keep track of seen IDs
+
+    headers.forEach((header, index) => {
+    // 1. Create the base slug from the text
+    let baseId = header.innerText
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '') // Remove special characters like punctuation
+        .replace(/\s+/g, '-');    // Replace spaces with dashes
+
+    // Fallback if the title is empty
+    if (!baseId) baseId = 'section';
+
+    // 2. Check if we've seen this ID before
+    if (idCounts[baseId] === undefined) {
+        // First time seeing this title
+        idCounts[baseId] = 0;
+        header.id = baseId;
+    } else {
+        // Repeated title: increment and append the number
+        idCounts[baseId]++;
+        header.id = `${baseId}-${idCounts[baseId]}`;
+    }
+
+    const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.dataset.target = header.id;
+
+        dot.addEventListener('click', () => {
+        isManualScrolling = true;
+        
+        // 1. Manually update classes immediately for instant feedback
+        dots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+
+        // 2. Perform the scroll
+        header.scrollIntoView({ behavior: 'smooth' });
+
+        // 3. Reset the flag after the scroll animation finishes (~800ms)
+        // This prevents the observer from "flickering" the active state during transit
+        setTimeout(() => {
+            isManualScrolling = false;
+        }, 800); 
+    });
+
+    container.appendChild(dot);
+    dots.push(dot);
+  });
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-10% 0px -70% 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    if (isManualScrolling) return; // Skip observer logic if we're clicking
+
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+        dots.forEach(dot => {
+            dot.classList.toggle('active', dot.dataset.target === entry.target.id);
+        });
+        }
+    });
+    }, {
+    root: null,
+    // Adjust rootMargin to be more sensitive to the top of the screen
+    rootMargin: '-10% 0px -60% 0px', 
+    threshold: 0.1 
+    });
+
+  headers.forEach(header => observer.observe(header));
+
+  function setInitialActiveDot() {
+    let currentActiveId = null;
+
+    // Loop through headers to find which one is currently in the viewport
+    // We look for the header closest to the top of the window but not past it
+    headers.forEach(header => {
+      const rect = header.getBoundingClientRect();
+      // If the header is in the top half of the screen
+      if (rect.top >= 0 && rect.top <= window.innerHeight * 0.4) {
+        currentActiveId = header.id;
+      }
+    });
+
+    // If we didn't find one in the "sweet spot", check if we've scrolled past headers
+    if (!currentActiveId) {
+      for (let i = headers.length - 1; i >= 0; i--) {
+        if (headers[i].getBoundingClientRect().top < 0) {
+          currentActiveId = headers[i].id;
+          break;
+        }
+      }
+    }
+
+    // Default to the first dot if we are at the very top, or highlight the found one
+    const targetId = currentActiveId || headers[0]?.id;
+    
+    dots.forEach(dot => {
+      dot.classList.toggle('active', dot.dataset.target === targetId);
+    });
+  }
+
+  // Run it immediately
+  setInitialActiveDot();
+}
+
+// 2. Initialize on first load
+if (document.readyState === 'complete') {
+  initScrollIndicator();
+} else {
+  document.addEventListener('DOMContentLoaded', initScrollIndicator);
+}
+
+// 3. Listen for Swup transitions
+// Replace 'swup' with your actual Swup instance variable name
+swup.hooks.on('page:view', () => {
+  initScrollIndicator();
+});
+</script>

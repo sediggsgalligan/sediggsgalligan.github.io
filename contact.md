@@ -2,6 +2,7 @@
 layout: default
 title: Contact
 permalink: /contact
+skip_title: false
 ---
 
 <div class="plain-page">

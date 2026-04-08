@@ -2,6 +2,7 @@
 layout: default
 title: About
 permalink: /
+skip_title: true
 ---
 
 <div class="about-layout">

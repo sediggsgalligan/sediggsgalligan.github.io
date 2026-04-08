@@ -34,7 +34,7 @@ const swup = new Swup({
     navItems.forEach(item => {
       const href = item.getAttribute('href');
       const isHome = currentPath === '/' || currentPath === '/index.html';
-      const isMatch = (href === '/' && isHome) || (href !== '/' && currentPath.startsWith(href));
+      const isMatch = (href === '/' && isHome) || (href !== '/' && currentPath == href) || (href !== '/' && currentPath == href + "/");
 
       if (isMatch) {
         item.classList.add('active');
