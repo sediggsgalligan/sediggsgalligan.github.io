@@ -4,7 +4,7 @@ layout: publication
 title: "Comparison of bonobo and chimpanzee brain microstructure reveals differences in socio-emotional circuits"
 date: "2019-01-01"
 
-authors: ["HA Issa", "N Staes", "S Diggs-Galligan", "CD Stimpson", "A Gendron-Fitzpatrick"]
+authors: ["H. Issa", "N. Staes", "S. Diggs-Galligan", "C. Stimpson", "A. Gendron-Fitzpatrick"]
 
 type: "paper"
 

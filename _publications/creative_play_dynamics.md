@@ -4,7 +4,7 @@ layout: publication
 title: "Explore, Exploit, Create: Quantifying the dynamics of exploratory play"
 date: "2021-01-01"
 
-authors: ["S Diggs-Galligan", "J Chu", "J Tenenbaum", "L Schulz"]
+authors: ["S. Diggs-Galligan", "J. Chu", "J. Tenenbaum", "L. Schulz"]
 
 type: "conf"
 

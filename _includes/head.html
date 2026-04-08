@@ -1,0 +1,73 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>{{ page.title }} - Sophia Diggs-Galligan</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+
+    <meta property="og:title" content="Sophia Diggs-Galligan">
+    <meta property="og:description" content="{{ site.description }}">
+    <meta property="og:image" content="{{ site.og_image }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="726">
+    <meta property="og:image:height" content="968">
+    <meta property="og:url" content="{{ site.url }}">
+
+    <meta property="twitter:title" content="Sophia Diggs-Galligan">
+    <meta property="twitter:description" content="{{site.description}}">
+    <meta property="twitter:image" content="{{ site.og_image }}">
+    <meta property="twitter:url" content="{{ site.url }}">
+    <!-- <meta name="twitter:site" content=""> -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+    <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Commissioner:wght@100..900&display=swap"
+    rel="stylesheet">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/buttons.css">
+
+    <script src="https://unpkg.com/swup@4"></script>
+    <script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+
+    <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon/favicon.ico' | relative_url }}">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/favicon/favicon-32x32.png' | relative_url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/favicon/favicon-16x16.png' | relative_url }}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/favicon/apple-touch-icon.png' | relative_url }}">
+
+    <link rel="manifest" href="{{ '/assets/favicon/site.webmanifest' | relative_url }}">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+
+    <script src="/assets/scripts/main.js"></script>
+    <script src="/assets/scripts/logo.js"></script>
+
+    <style>
+    .char {
+    cursor: grab;
+    display: inline-block;
+    background-color: transparent;
+    opacity: 0;
+    }
+
+    .char path {
+    pointer-events: auto;
+    }
+
+    .char:active {
+    cursor: grabbing;
+    }
+    </style>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="/assets/scripts/send_drawing.js"></script>
+    <script src="/assets/scripts/projects_page.js"></script>
+
+</head>

@@ -4,9 +4,12 @@ email: hi@sophiadg.com
 description: Artist and researcher living in San Francisco, CA.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://sophiadg.com"
+og_image: "https://sophiadg.com/assets/images/sophia_pic.webp"
+github_username: sediggsgalligan
 
-# Build settings — no theme; fully custom layout
-# theme: minima
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
 
 collections:
   projects:
