@@ -680,7 +680,7 @@ h2.project-title {
   }
   
   .site-title svg {
-    max-width: 70%; /* Adjust so it doesn't hit the hamburger icon */
+    max-width: 70%;
     height: auto;
   }
   
@@ -722,10 +722,23 @@ h2.project-title {
   } */
 }
 
+@media (max-width: 600px) {
+  .site-title svg {
+    max-width: 80%;
+    height: auto;
+  }
+}
+
 @media (max-width: 400px) {
   .menu-toggle {
     width: 3rem;
     height: 3rem;
+  }
+
+
+  .site-title svg {
+    max-width: 95%;
+    height: auto;
   }
 }
 

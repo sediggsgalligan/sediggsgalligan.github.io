@@ -104,7 +104,7 @@ const swup = new Swup({
 
   function updateViewBox(e) {
     if (e.matches) {
-      nameSvg.setAttribute('viewBox', '0 -30 720 124');
+      nameSvg.setAttribute('viewBox', '0 -30 730 124');
     } else {
       nameSvg.setAttribute('viewBox', '-350 -30 1433 124');
     }
@@ -114,7 +114,7 @@ const swup = new Swup({
     if (e.matches) {
       // nameSvg.setAttribute('viewBox', '-150 -30 1000 124');
       // nameSvg.setAttribute('viewBox', '0 -30 800 124');
-      nameSvg.setAttribute('viewBox', '0 -30 650 124');
+      nameSvg.setAttribute('viewBox', '0 -30 730 124');
     }
   }
 
