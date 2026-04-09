@@ -17,26 +17,36 @@ function initSignature() {
   const characters = Array.from(document.querySelectorAll('.char'));
   if (!svg || characters.length === 0) return;
 
-  // Initialize order if it's the first run
+  // Prevent mobile browser bouncing/scrolling while dragging
+  svg.style.touchAction = "none";
+
   if (!currentOrder) {
     currentOrder = characters.map((_, i) => i);
   }
 
-  // 1. Measure natural design
   gsap.set(characters, { x: 0, y: 0 });
 
   const charData = characters.map((el, i) => {
     const box = el.getBBox();
     
+    // INCREASE HITBOX SIZE HERE
+    // 15-20px is generally the "sweet spot" for finger precision
+    const hitboxPadding = 15; 
+
     if (!el.querySelector('rect.hitbox')) {
       const hitBox = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       hitBox.setAttribute("class", "hitbox");
-      hitBox.setAttribute("x", box.x);
-      hitBox.setAttribute("y", box.y);
-      hitBox.setAttribute("width", box.width);
-      hitBox.setAttribute("height", box.height);
+      
+      // Expand the rectangle dimensions beyond the natural bounding box
+      hitBox.setAttribute("x", box.x - hitboxPadding);
+      hitBox.setAttribute("y", box.y - hitboxPadding);
+      hitBox.setAttribute("width", box.width + (hitboxPadding * 2));
+      hitBox.setAttribute("height", box.height + (hitboxPadding * 2));
+      
       hitBox.setAttribute("fill", "transparent");
       hitBox.style.pointerEvents = "all";
+      
+      // Tip: Change "transparent" to "rgba(255,0,0,0.2)" to visualize the hitboxes while testing
       el.insertBefore(hitBox, el.firstChild);
     }
 
@@ -53,7 +63,6 @@ function initSignature() {
   const originX = charData[0].naturalX;
   let draggingEl = null;
   const animState = characters.map((_, i) => {
-    // PRE-CALCULATE initial positions to avoid the jump
     const slots = getDynamicPositions(currentOrder);
     const charIdxInOrder = currentOrder.indexOf(i);
     return { current: slots[charIdxInOrder] - charData[i].naturalX };
@@ -70,7 +79,6 @@ function initSignature() {
     });
   }
 
-  // 2. Animation Loop
   function updatePositions() {
     const slotXPositions = getDynamicPositions(currentOrder);
     currentOrder.forEach((charIdx, slotIdx) => {
@@ -88,21 +96,21 @@ function initSignature() {
   }
   requestAnimationFrame(updatePositions);
 
-  // Set initial positions immediately before revealing to prevent flash
   currentOrder.forEach((charIdx, slotIdx) => {
     const slots = getDynamicPositions(currentOrder);
     gsap.set(characters[charIdx], { 
       x: slots[slotIdx] - charData[charIdx].naturalX,
-      opacity: 1 // Reveal now that they are in the right place
+      opacity: 1 
     });
   });
 
-  // 3. Draggable
   draggableInstances = Draggable.create(characters, {
     type: "x,y",
     onDragStart: function() {
       draggingEl = this.target;
       gsap.set(this.target, { zIndex: 100 });
+      // Visual feedback: pop the letter up slightly when grabbed
+      gsap.to(this.target, { scale: 1.1, duration: 0.2 });
       resetIdleTimer();
     },
     onDrag: function() {
@@ -130,7 +138,7 @@ function initSignature() {
       const finalOffset = slots[slotIdx] - charData[charIdx].naturalX;
       
       gsap.to(this.target, {
-        x: finalOffset, y: 0, duration: 0.6, ease: "elastic.out(1, 0.5)",
+        x: finalOffset, y: 0, scale: 1, duration: 0.6, ease: "elastic.out(1, 0.5)",
         onComplete: () => {
           animState[charIdx].current = finalOffset;
           gsap.set(this.target, { zIndex: "" });
@@ -197,12 +205,9 @@ function triggerWelcomeWiggle() {
   const characters = document.querySelectorAll('.char');
   const charArray = Array.from(characters);
 
-  // Sort based on where the character's index exists within currentOrder
   const ordered_chars = charArray.sort((a, b) => {
     const idA = charArray.indexOf(a);
     const idB = charArray.indexOf(b);
-    
-    // Find which "slot" these IDs currently occupy
     return currentOrder.indexOf(idA) - currentOrder.indexOf(idB);
   });
 
@@ -219,7 +224,6 @@ function resetSignaturePositions() {
   if (!characters.length) return;
 
   currentOrder = Array.from(characters).map((_, i) => i);
-
   lastInteractionTime = Date.now();
   hasInteracted = false;
 

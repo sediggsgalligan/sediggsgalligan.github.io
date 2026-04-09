@@ -15,6 +15,11 @@
   /* Fonts */
   --font-body: 'Commissioner', sans-serif;
   --font-heading: 'Montserrat', sans-serif;
+
+  --c-about-faint: rgba(224, 120, 32,  0.2);
+  --c-projects-faint: rgba(212, 160, 23,  0.2);
+  --c-experience-faint: rgba(58,  170, 53,  0.2);
+  --c-contact-faint: rgba(41,  148, 168, 0.2);
 }
 
 /* =============================================
@@ -85,6 +90,7 @@ img {
   letter-spacing: 0.03em;
   margin-bottom: 1.6rem;
   color: var(--text);
+  touch-action: none;
 }
 
 .site-title a {
@@ -407,10 +413,10 @@ img {
 /* =============================================
    Section color tokens (set via data-section on <body>)
    ============================================= */
-body[data-section="about"]    { --c-section: var(--c-about);      --c-section-faint: rgba(224, 120, 32,  0.2); }
-body[data-section="projects"] { --c-section: var(--c-projects);   --c-section-faint: rgba(212, 160, 23,  0.2); }
-body[data-section="research"] { --c-section: var(--c-experience); --c-section-faint: rgba(58,  170, 53,  0.2); }
-body[data-section="contact"]  { --c-section: var(--c-contact);    --c-section-faint: rgba(41,  148, 168, 0.2); }
+body[data-section="about"]    { --c-section: var(--c-about);      --c-section-faint: var(--c-about-faint); }
+body[data-section="projects"] { --c-section: var(--c-projects);   --c-section-faint: var(--c-projects-faint); }
+body[data-section="research"] { --c-section: var(--c-experience); --c-section-faint: var(--c-experience-faint); }
+body[data-section="contact"]  { --c-section: var(--c-contact);    --c-section-faint: var(--c-contact-faint); }
 
 /* =============================================
    Page Loader
@@ -599,13 +605,16 @@ h2.project-title {
   .project-card {
     /* 3. Define where the card snaps to the viewport */
     scroll-snap-align: center;
-    
-    /* Ensure cards are large enough to feel like "pages" */
-    min-height: 80vh;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    scroll-snap-align: start;
+  }
+  
+  .site-wrapper:has(.projects-grid) {
+    max-height: 100vh;
+    overflow: clip;
   }
 }
 
@@ -634,7 +643,6 @@ h2.project-title {
 /* --- Mobile Styles --- */
 @media (max-width: 768px) {
   .site-title {
-    /* position: relative; */
     z-index: 2001; /* Higher than the nav overlay (2000) */
     pointer-events: none; /* Allows clicks to pass through to the home link if needed */
 
@@ -645,6 +653,9 @@ h2.project-title {
     position: absolute;
     right: auto;
     height: 100%;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    position: static;
   }
   
   .site-title svg {

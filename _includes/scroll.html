@@ -1,0 +1,98 @@
+<style>
+  .project-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+  .project-header { margin-bottom: 30px; text-align: center; }
+  .project-title { font-size: 2.5rem; margin-bottom: 5px; }
+  .project-date { color: #888; font-style: italic; }
+  
+  .project-main-image { margin-bottom: 30px; border-radius: 8px; overflow: hidden; }
+  .project-main-image img { width: 100%; height: auto; display: block; }
+  
+  .project-description .lead { font-size: 1.2rem; color: #444; line-height: 1.6; margin-bottom: 20px; }
+  .post-body { line-height: 1.8; color: #333; }
+  
+  .project-footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; }
+  .back-link { text-decoration: none; color: #007bff; font-weight: bold; }
+  .back-link:hover { text-decoration: underline; }
+
+  /* Using your css_class for specific overrides */
+  .luminaria { /* Example: background: #fffcf0; */ }
+
+
+  #scroll-indicator {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 100;
+    }
+
+    .dot {
+        width: 16px;
+        height: 16px;
+        background-color: #ccc; /* Inactive color */
+        cursor: pointer;
+        transition: all 0.5s cubic-bezier(0.5, 0, 0.5, 1);
+        
+        /* Create the initial circle shape using a mask */
+        -webkit-mask-image: url('/assets/images/indicators/circle.svg');
+        mask-image: url('/assets/images/indicators/circle.svg');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+    }
+
+    .dot.active {
+        background-color: var(--c-projects); /* Active color */
+        transform: scale(1.4) rotate(360deg); /* Adds a little spin to the star transition */
+        
+        /* Swap to your custom star SVG */
+        -webkit-mask-image: url('/assets/images/indicators/star.svg');
+        mask-image: url('/assets/images/indicators/star.svg');
+        
+        /* Glow effect */
+        box-shadow: 0 0 15px var(--c-projects-faint); 
+    }
+
+    .dot.active.heart {
+        background-color: rgb(255, 73, 103);
+        transform: scale(1.4) rotate(360deg); /* Adds a little spin to the heart transition */
+        
+        /* Swap to your custom heart SVG */
+        -webkit-mask-image: url('/assets/images/indicators/heart.svg');
+        mask-image: url('/assets/images/indicators/heart.svg');
+        
+        /* Glow effect */
+        box-shadow: 0 0 15px rgba(255, 105, 180, 0.6); 
+    }
+
+
+    .dot.active.square {
+        background-color: var(--c-contact);
+        transform: scale(1.4) rotate(360deg); /* Adds a little spin to the square transition */
+        
+        /* Swap to your custom square SVG */
+        -webkit-mask-image: url('/assets/images/indicators/square.svg');
+        mask-image: url('/assets/images/indicators/square.svg');
+        
+        /* Glow effect */
+        box-shadow: 0 0 15px var(--c-contact-faint);
+    }
+
+    .dot.active.triangle {
+        background-color: var(--c-experience);
+        transform: scale(1.4) rotate(360deg); /* Adds a little spin to the triangle transition */
+        
+        /* Swap to your custom triangle SVG */
+        -webkit-mask-image: url('/assets/images/indicators/triangle.svg');
+        mask-image: url('/assets/images/indicators/triangle.svg');
+        
+        /* Glow effect */
+        box-shadow: 0 0 15px var(--c-experience-faint); 
+    }
+</style>
+<script src="/assets/scripts/scroll.js"></script>
+<nav id="scroll-indicator" {% if page.scroll_selector %}data-scroll-selector="{{ page.scroll_selector }}"{% endif %}></nav>

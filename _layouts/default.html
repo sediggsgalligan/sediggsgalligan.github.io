@@ -3,7 +3,7 @@
 
 {% include head.html %}
 
-<body data-section="{% if page.url == '/' or page.url == '/index.html' %}about{% elsif page.url contains 'projects' %}projects{% elsif page.url contains 'research' %}research{% elsif page.url contains 'contact' %}contact{% else %}about{% endif %}">
+<body>
   <div id="page-load-bar"></div>
   <div id="page-loader" aria-label="Loading" role="status">
     <div class="loader-spinner"></div>
@@ -43,7 +43,11 @@
       </nav>
     </header>
 
+    
     <main id="swup" class="transition-fade page-content">
+      {% if page.add_scroll %}
+        {% include scroll.html %}
+      {% endif %}
       {{ content }}
     </main>
 

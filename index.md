@@ -6,7 +6,7 @@ skip_title: true
 ---
 
 <div class="about-layout">
-  <div class="about-photo">
+  <div class="about-photo" style="user-select: none;">
     <img src="/assets/images/sophia_pic.webp" alt="Illustration of Sophia Diggs-Galligan" loading="lazy">
   </div>
 

@@ -1,0 +1,99 @@
+{% capture random_id %}{% increment carousel_counter %}{% endcapture %}
+{% assign carousel_id = include.id | default: random_id | prepend: "carousel-" %}
+{% assign image_count = include.images | size %}
+
+<style>
+  #{{ carousel_id }} .gallery-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+
+  #{{ carousel_id }} .gallery-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  #{{ carousel_id }} .gallery-item {
+    display: none;
+    text-align: center;
+  }
+
+  #{{ carousel_id }} .gallery-item.active {
+    display: block;
+  }
+
+  #{{ carousel_id }} .gallery-item img {
+    width: 100%;
+    border-radius: 8px;
+    height: auto;
+  }
+
+  #{{ carousel_id }} .button-row {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    transition: transform 0.2s;
+  }
+
+  .nav-btn:hover { transform: scale(1.2); }
+</style>
+
+<div id="{{ carousel_id }}">
+  <div class="gallery-container">
+    <div class="gallery-wrapper">
+      {% for item in include.images %}
+      <figure class="gallery-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ item.image | relative_url }}" alt="{{ item.caption }}">
+        <figcaption>
+          <strong>Figure {{ forloop.index }}:</strong> {{ item.caption }}
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+
+    {% if image_count > 1 %}
+    <div class="button-row">
+      <button class="nav-btn prev" aria-label="Previous">
+          <img src="{{ '/assets/images/indicators/arrow_left.svg' | relative_url }}" alt="Left" width="50" height="50">
+      </button>
+      <button class="nav-btn next" aria-label="Next">
+          <img src="{{ '/assets/images/indicators/arrow_right.svg' | relative_url }}" alt="Right" width="50" height="50">
+      </button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if image_count > 1 %}
+<script>
+  (function() {
+    const container = document.getElementById('{{ carousel_id }}');
+    const items = container.querySelectorAll('.gallery-item');
+    const prevBtn = container.querySelector('.prev');
+    const nextBtn = container.querySelector('.next');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      items[currentIndex].classList.remove('active');
+      currentIndex = (index + items.length) % items.length;
+      items[currentIndex].classList.add('active');
+    }
+
+    prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
+    nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
+  })();
+</script>
+{% endif %}

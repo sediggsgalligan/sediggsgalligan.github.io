@@ -96,7 +96,7 @@ const swup = new Swup({
 
   function updateViewBox(e) {
     if (e.matches) {
-      nameSvg.setAttribute('viewBox', '0 -30 700 124');
+      nameSvg.setAttribute('viewBox', '0 -30 720 124');
     } else {
       nameSvg.setAttribute('viewBox', '-350 -30 1433 124');
     }
