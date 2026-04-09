@@ -31,7 +31,9 @@
   #{{ carousel_id }} .gallery-item img {
     width: 100%;
     border-radius: 8px;
-    height: auto;
+    /* height: auto; */
+    height: 50vh;
+    object-fit: contain;
   }
 
   #{{ carousel_id }} .button-row {
@@ -51,14 +53,19 @@
   .nav-btn:hover { transform: scale(1.2); }
 </style>
 
-<div id="{{ carousel_id }}">
+<div id="{{ carousel_id }}" data-carousel="gallery">
   <div class="gallery-container">
     <div class="gallery-wrapper">
       {% for item in include.images %}
       <figure class="gallery-item {% if forloop.first %}active{% endif %}">
         <img src="{{ item.image | relative_url }}" alt="{{ item.caption }}">
         <figcaption>
-          <strong>Figure {{ forloop.index }}:</strong> {{ item.caption }}
+        <strong>
+            {% if image_count > 1 %}
+            ({{ forloop.index }}/{{ image_count }}):
+            {% endif %}
+        </strong> 
+        {{ item.caption }}
         </figcaption>
       </figure>
       {% endfor %}
@@ -76,24 +83,3 @@
     {% endif %}
   </div>
 </div>
-
-{% if image_count > 1 %}
-<script>
-  (function() {
-    const container = document.getElementById('{{ carousel_id }}');
-    const items = container.querySelectorAll('.gallery-item');
-    const prevBtn = container.querySelector('.prev');
-    const nextBtn = container.querySelector('.next');
-    let currentIndex = 0;
-
-    function showSlide(index) {
-      items[currentIndex].classList.remove('active');
-      currentIndex = (index + items.length) % items.length;
-      items[currentIndex].classList.add('active');
-    }
-
-    prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
-    nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
-  })();
-</script>
-{% endif %}
