@@ -103,6 +103,12 @@ scroll_selector: .project-card
     background: #eee;
     margin: 1.5rem auto 0;
   }
+
+}
+@media (min-width: 769px) {
+  #swup:has(.projects-grid) #scroll-indicator {
+    display: none;
+  }
 }
 </style>
 
