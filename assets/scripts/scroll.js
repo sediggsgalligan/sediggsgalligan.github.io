@@ -55,13 +55,11 @@ function initScrollIndicator() {
   // 3. SYNCED OBSERVER: Uses the "Tripwire" method
   scrollObserver = new IntersectionObserver((entries) => {
     if (isManualScrolling) return;
-    console.log('Observer triggered');
 
     any_intersections_already = false;
     entries.forEach(entry => {
       // When scrolling DOWN, we want the element that just entered the top buffer
       // When scrolling UP, we want the element that is still visible
-      console.log(entry.target.id, entry.isIntersecting, entry.intersectionRatio);
       if (entry.isIntersecting && entry.intersectionRatio > 0 && !any_intersections_already) {
         any_intersections_already = true;
         dots.forEach(dot => {
@@ -88,8 +86,6 @@ function setInitialActiveDot(headers, dots) {
   
   headers.forEach(header => {
     const rect = header.getBoundingClientRect();
-    console.log(header.id, rect.top >= 0 && rect.top <= window.innerHeight * 0.25);
-    // Match the 20% rootMargin top
     if (rect.top >= 0 && rect.top <= window.innerHeight * 0.25) {
       currentActiveId = header.id;
     }

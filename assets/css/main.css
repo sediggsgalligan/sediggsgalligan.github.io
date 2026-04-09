@@ -22,6 +22,27 @@
   --c-contact-faint: rgba(41,  148, 168, 0.2);
 }
 
+
+.about-layout ::-moz-selection {
+    color: var(--c-text);
+    background: #ff77006f;
+}
+
+.about-layout ::selection {
+    color: var(--c-text);
+    background: #ff77006f;
+}
+
+#swup:has(.projects-grid) ::selection {
+    color: var(--c-text);
+    background: #f7ad006f;
+}
+
+#swup:has(.projects-grid) ::-moz-selection {
+    color: var(--c-text);
+    background: #f7ad006f;
+}
+
 /* =============================================
    Reset & Base
    ============================================= */

@@ -84,6 +84,14 @@ const swup = new Swup({
   window.addEventListener('DOMContentLoaded', () => {
     updateActiveNav();
     initHamburger(); // Initialize the toggle listener
+
+    let section = 'about';
+    const dest = window.location.pathname;
+    if (dest === '/' || dest === '/index.html') section = 'about';
+    else if (dest.startsWith('/projects')) section = 'projects';
+    else if (dest.startsWith('/research')) section = 'research';
+    else if (dest.startsWith('/contact')) section = 'contact';
+    document.body.dataset.section = section;
   });
 
   function handleSvgViewbox() {
