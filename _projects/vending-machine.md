@@ -2,19 +2,23 @@
 title: Anything Vending Machine
 date: 2025-02-27 19:49:59 -0800
 hidden: false
-image: /assets/images/vendingmachine.webp
-image_active: /assets/images/vendingmachine.webp
-description: Order anything you can imagine — we have it in stock!
+image: /assets/images/project_thumbnails/vending_machine.webp
+image_active: /assets/images/project_thumbnails/vending_machine_hover.webp
+description: A portable, human-operated vending machine that invited strangers in Dolores Park to order literally anything.
 css_class: vending_machine
 priority: 4
 
-
-egg_image_carousel:
-  - image: "https://www.itstorque.com/blog/2025_02_17_egg_sims/egg_images/annotated_egg2.jpg"
-    caption: "Picture of eggs cooked using 2 pulsed methods."
-  - image: "https://www.itstorque.com/blog/2025_02_05_voronoi_perimeters/voronoi_circle_times_2.png"
-    caption: "2D Voronoi diagram showcasing 8 random points."
-
+vending_machine_carousel:
+  - image: "assets/images/projects/vending-machine-images/vending_machine_1.webp"
+    caption: ""
+  - image: "assets/images/projects/vending-machine-images/vending_machine_2.webp"
+    caption: ""
+  - image: "assets/images/projects/vending-machine-images/vending_machine_3.webp"
+    caption: ""
+  - image: "assets/images/projects/vending-machine-images/vending_machine_4.webp"
+    caption: ""
+  - image: "assets/images/projects/vending-machine-images/vending_machine_5.webp"
+    caption: ""
 
 image_1_carousel:
   - image: "assets/images/projects/vending-machine-images/image_1.webp"
@@ -52,6 +56,8 @@ c5_carousel:
   - image: "assets/images/projects/vending-machine-images/carousel_5_3.webp"
     caption:
 ---
+
+{% include carousel.html images=page.vending_machine_carousel %}
 
 
 # Motivation

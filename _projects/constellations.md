@@ -1,145 +1,37 @@
 ---
-title: Constellations
+title: Constellation Dome
 date: 2024-06-01
 hidden: false
-image: /assets/images/project_thumbnails/
-image_active: /assets/images/project_thumbnails/
-description: 
+image: /assets/images/project_thumbnails/constellations.webp
+image_active: /assets/images/project_thumbnails/constellations_active.webp
+description: A geodesic dome where participants could create their own constellations with string in a sky of glow-in-the-dark stars.
 css_class: constellations
-priority: 5
+priority: 6
+
+constellation_dome_carousel:
+  - image: "assets/images/projects/constellation-dome/constellation_dome_1.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_2.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_3.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_4.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_5.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_6.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_7.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_8.webp"
+    caption: ""
+  - image: "assets/images/projects/constellation-dome/constellation_dome_9.webp"
+    caption: ""
+
 ---
 
-<!-- <div style="height:90vh">
-<iframe width="100%" height="100%" src="https://www.itstorque.com/constellations-fidget-camp-2025/?"></iframe>
-</div> -->
+{% include carousel.html images=page.constellation_dome_carousel %}
 
-<!-- <div style="
-    max-width: 1000px; 
-    margin: 20px auto; 
-    border-radius: 12px; 
-    overflow: hidden; 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15); 
-    border: 1px solid #e0e0e0;
-    font-family: sans-serif;
-">
-    <div style="
-        background: #f1f1f1; 
-        padding: 10px 15px; 
-        display: flex; 
-        align-items: center; 
-        gap: 8px;
-        border-bottom: 1px solid #ddd;
-    ">
-        <div style="width: 12px; height: 12px; background: #ff5f56; border-radius: 50%;"></div>
-        <div style="width: 12px; height: 12px; background: #ffbd2e; border-radius: 50%;"></div>
-        <div style="width: 12px; height: 12px; background: #27c93f; border-radius: 50%;"></div>
-        
-        <div style="
-            background: white; 
-            flex-grow: 1; 
-            margin: 0 15px; 
-            border-radius: 6px; 
-            padding: 4px 12px; 
-            font-size: 12px; 
-            color: #888; 
-            text-align: center;
-            border: 1px solid #eee;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        ">
-            itstorque.com/constellations-fidget-camp-2025/
-        </div>
-    </div>
-
-    <div style="height: 70vh; background: white;">
-        <iframe 
-            src="https://www.itstorque.com/constellations-fidget-camp-2025/?" 
-            width="100%" 
-            height="100%" 
-            frameborder="0"
-            style="display: block;"
-        ></iframe>
-    </div>
-</div>
-
-
-<div style="
-    position: relative;
-    width: 375px; 
-    height: 812px; 
-    margin: 40px auto; 
-    border: 12px solid #222; 
-    border-radius: 50px; 
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-    background: #000;
-    overflow: hidden;
-">
-    <div style="
-        position: absolute;
-        top: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 120px;
-        height: 25px;
-        background: #000;
-        border-radius: 20px;
-        z-index: 10;
-    "></div>
-
-    <div style="
-        height: 44px;
-        background: #f8f8f8;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        padding: 0 30px 8px;
-        font-size: 12px;
-        font-weight: bold;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    ">
-        <span>9:41</span>
-        <div style="display: flex; gap: 4px;">
-            <span>📶</span><span>🔋</span>
-        </div>
-    </div>
-
-    <div style="height: calc(100% - 44px - 60px); background: #fff;">
-        <iframe 
-            src="https://www.itstorque.com/constellations-fidget-camp-2025/?" 
-            width="100%" 
-            height="100%" 
-            frameborder="0"
-        ></iframe>
-    </div>
-
-    <div style="
-        height: 60px;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        border-top: 1px solid #ddd;
-    ">
-        <span style="font-size: 20px; color: #007aff;">＜</span>
-        <span style="font-size: 20px; color: #007aff;">＞</span>
-        <span style="font-size: 18px; color: #007aff;">⎋</span>
-        <span style="font-size: 20px; color: #007aff;">❐</span>
-    </div>
-
-    <div style="
-        position: absolute;
-        bottom: 8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 120px;
-        height: 5px;
-        background: #000;
-        border-radius: 10px;
-    "></div>
-</div>
- -->
 <style>
 .figure-container {
     display: flex;
