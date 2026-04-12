@@ -2,8 +2,8 @@
 title: Anything Vending Machine
 date: 2025-02-27 19:49:59 -0800
 hidden: false
-image: /assets/images/project_thumbnails/vending_machine.webp
-image_active: /assets/images/project_thumbnails/vending_machine_hover.webp
+image: /assets/images/project_thumbnails/vendingmachine.webp
+image_active: /assets/images/project_thumbnails/vendingmachine_hover.webp
 description: A portable, human-operated vending machine that invited strangers in Dolores Park to order literally anything.
 css_class: vending_machine
 priority: 4

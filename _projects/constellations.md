@@ -2,8 +2,8 @@
 title: Constellation Dome
 date: 2024-06-01
 hidden: false
-image: /assets/images/project_thumbnails/constellations.webp
-image_active: /assets/images/project_thumbnails/constellations_active.webp
+image: /assets/images/project_thumbnails/constellation.webp
+image_active: /assets/images/project_thumbnails/constellation_hover.webp
 description: A geodesic dome where participants could create their own constellations with string in a sky of glow-in-the-dark stars.
 css_class: constellations
 priority: 6

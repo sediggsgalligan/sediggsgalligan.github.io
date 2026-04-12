@@ -88,12 +88,32 @@ img {
   padding: 2rem 2rem 4rem;
 }
 
+@media (max-width: 768px) {
+  .site-wrapper {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .about-layout, .plain-page {
+    padding: 1.5rem 1rem 3rem;
+  }
+}
+
 @media (max-width: 600px) {
   .about-layout, .plain-page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
 }
+
+@media (max-width: 500px) {
+  .site-wrapper {
+    padding: 0.5rem 0.5rem 2rem;
+  }
+
+  .about-layout, .plain-page {
+    padding: 0.5rem 0.5rem 2rem;
+  }
 }
 
 /* =============================================
@@ -598,12 +618,12 @@ h2.project-title {
   }
 }
 
-.project-card-img.pillowfort {
+/* .project-card-img.pillowfort {
   transform: scale(0.9) translateY(15%) translateX(6%);
 }
 .project-card-img.img-active.wovenpoem {
   transform: scale(0.98) translateY(1%) translateX(1%);
-}
+} */
 
 /* Snapping */
 @media (max-width: 768px) {
@@ -686,9 +706,11 @@ h2.project-title {
   
   .menu-toggle {
     display: flex;
-    position: absolute;
+    /* position: absolute; */
     top: 0.5rem;
-    right: -1.25rem;
+    /* right: -1.25rem; */
+    position: fixed;
+    right: 1em;
   }
 
   .nav {
@@ -730,10 +752,10 @@ h2.project-title {
 }
 
 @media (max-width: 400px) {
-  .menu-toggle {
+  /* .menu-toggle {
     width: 3rem;
     height: 3rem;
-  }
+  } */
 
 
   .site-title svg {

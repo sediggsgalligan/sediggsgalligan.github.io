@@ -11,7 +11,14 @@ skip_title: false
 
     <style>
         .drawing-section { display: flex; flex-direction: column; align-items: center; margin-top: 30px; position: relative; }
-        #canvas-container { border: 5px solid #555; background: white; cursor: crosshair; touch-action: none; position: relative; width: 600px; height: 400px; }
+        #canvas-container { border: 5px solid #555; background: white; cursor: crosshair; touch-action: none; }
+        #canvas-container {
+            max-width: 600px;
+            width: 100vw;
+            margin: 2rem auto;
+            position: relative;
+            max-height: 90vh;
+        }
         canvas { display: block; }
         .toolbar { margin: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
         .crayon { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
@@ -37,9 +44,10 @@ skip_title: false
             <div class="crayon" style="background: rgb(0, 171, 29);"></div>
             <div class="crayon" style="background: rgb(0, 133, 157);"></div>
             <div class="crayon" style="background: rgb(225, 127, 235);"></div>
-            
-            <button id="clear-btn" style="background: #dc3545;">Clear</button>
-            <button id="done-btn" style="background: #28a745;">Done</button>
+            <div>
+                <button id="clear-btn" style="background: #dc3545;">Clear</button>
+                <button id="done-btn" style="background: #28a745;">Done</button>
+            </div>
         </div>
 
         <div id="canvas-container">
