@@ -6,7 +6,7 @@ image: /assets/images/project_thumbnails/pyrotechnics.webp
 image_active: /assets/images/project_thumbnails/pyrotechnics_hover.webp
 description: I like to make pyrotechnics of many varieties, most recently with the Western Pyrotechnic Association!
 css_class: pyrotechnics
-priority: 5
+priority: 6
 
 pyrotechnics_carousel:
   - image: "assets/images/projects/pyrotechnics/pyrotechnics_1.webp"
