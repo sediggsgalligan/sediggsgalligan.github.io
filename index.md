@@ -13,7 +13,9 @@ skip_title: true
   <div class="about-text">
     <p>Hi, I'm Sophia!</p>
     <p>I'm an artist and researcher living in San Francisco, CA.</p>
-    <p>I'm really interested in human cognition, behavior, and development. I like to work on projects that explore how humans play, communicate, pay attention, and collaborate.</p>
-    <p>I've been trying out a bunch of different approaches and mediums! These include poetry, exhibit and toy design, pyrotechnics, embroidery, electronics, and social practice.</p>
+    <p>I graduated from MIT in 2022 with a BS in computer science & cognitive science, and currently lead a variety of projects at SAP Labs, including HCI and organizational behavior research.
+</p>
+    <p>My work explores how humans play, create, collaborate, and form community. I build tangible interfaces and interactive installations that allow for play and co-creation in public and community spaces (ranging from galleries & museums to Dolores Park). I love finding new ways of combining interaction design and experimental design to create playful participatory machines that gather rich naturalistic data in order to better understand the mechanisms of social wellbeing, creativity, and human flourishing.
+</p>
   </div>
 </div>
