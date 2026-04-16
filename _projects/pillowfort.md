@@ -6,7 +6,7 @@ image: /assets/images/project_thumbnails/pillowfort.webp
 image_active: /assets/images/project_thumbnails/pillowfort_hover.webp
 css_class: pillowfort
 description: A set of magnetic pillow building blocks for building free-standing pillowforts.
-priority: 2
+priority: 4
 
 pillowfort_carousel:
   - image: "assets/images/projects/pillowfort/pillow_fort_1.webp"

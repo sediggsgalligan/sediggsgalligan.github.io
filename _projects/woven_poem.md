@@ -6,7 +6,7 @@ image: /assets/images/project_thumbnails/wovenpoem.webp
 image_active: /assets/images/project_thumbnails/wovenpoem_hover.webp
 description: An interactive installation that allows participants to collectively create very constrained poetry by weaving.
 css_class: wovenpoem
-priority: 3
+priority: 6
 
 woven_poem_carousel:
   - image: "assets/images/projects/woven-poem/woven_poem_1.webp"

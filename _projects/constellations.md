@@ -6,7 +6,7 @@ image: /assets/images/project_thumbnails/constellation.webp
 image_active: /assets/images/project_thumbnails/constellation_hover.webp
 description: A geodesic dome where participants could create their own constellations with string in a sky of glow-in-the-dark stars.
 css_class: constellations
-priority: 6
+priority: 2
 
 constellation_dome_carousel:
   - image: "assets/images/projects/constellation-dome/constellation_dome_1.webp"

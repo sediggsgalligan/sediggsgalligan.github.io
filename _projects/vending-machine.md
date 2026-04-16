@@ -6,7 +6,7 @@ image: /assets/images/project_thumbnails/vendingmachine.webp
 image_active: /assets/images/project_thumbnails/vendingmachine_hover.webp
 description: A portable, human-operated vending machine that invited strangers in Dolores Park to order literally anything.
 css_class: vending_machine
-priority: 4
+priority: 1
 
 vending_machine_carousel:
   - image: "assets/images/projects/vending-machine-images/vending_machine_1.webp"
