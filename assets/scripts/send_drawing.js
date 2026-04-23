@@ -75,7 +75,7 @@ function initContactDrawing() {
             
             // Re-fetch keys from the data attributes on the container
             const container = document.getElementById('drawing-app-container');
-            const pk = atob(container.dataset.pk); 
+            const pk = container.dataset.pk; 
             const sID = container.dataset.sid;
             const tID = container.dataset.tid;
 
