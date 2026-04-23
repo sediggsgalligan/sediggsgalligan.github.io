@@ -40,3 +40,7 @@ defaults:
     values:
       layout: "project" # The name of your new layout file (project.html)
 
+env:
+  EMAILJS_PUBLIC_KEY: 4672O2UmK4kpMYRKd
+  EMAILJS_SERVICE_ID: service_15fk9jf
+  EMAILJS_TEMPLATE_ID: template_b2nibgk
